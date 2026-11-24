@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<title>언어를 넘는 119! 사상구 생활·AED 안전지도</title>
+<style>
+  :root {
+    --navy: #142B44;
+    --navy-light: #1F4166;
+    --red: #D62828;
+    --red-dark: #B01E1E;
+    --green: #0F8B4C;
+    --blue: #1D63B8;
+    --orange: #E06D1B;
+    --bg: #F3F6FA;
+    --card: #FFFFFF;
+    --text: #1E293B;
+    --muted: #64748B;
+    --border: #E2E8F0;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.45;
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--navy);
+    color: #fff;
+    padding: 12px 16px 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .title-wrap h1 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .title-wrap p {
+    margin: 2px 0 0;
+    font-size: 11.5px;
+    color: #BFD8F2;
+  }
+  .call-119 {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--red);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 14px;
+    padding: 8px 13px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(255,255,255,0.85);
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(214,40,40,0.45);
+    flex-shrink: 0;
+  }
+  .call-119:active { background: var(--red-dark); transform: scale(0.97); }
+
+  .lang-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .lang-btn {
+    background: rgba(255,255,255,0.12);
+    color: #E2E8F0;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 8px;
+    padding: 6px 4px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .lang-btn.active {
+    background: #FFFFFF;
+    color: var(--navy);
+    border-color: #FFFFFF;
+  }
+
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 12px 14px 40px;
+  }
+
+  .alert-box {
+    background: #FFF5F5;
+    border: 1px solid #FECACA;
+    border-left: 4px solid var(--red);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    color: #7F1D1D;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .mode-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #E2E8F0;
+    padding: 4px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+  .mode-tab {
+    border: none;
+    background: transparent;
+    padding: 9px 8px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #475569;
+    cursor: pointer;
+  }
+  .mode-tab.active {
+    background: #FFFFFF;
+    color: var(--navy);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  .chips {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    scrollbar-width: none;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .chip.active {
+    background: var(--navy);
+    color: #fff;
+    border-color: var(--navy);
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .map-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(15,23,42,0.05);
+    margin-bottom: 12px;
+  }
+  .map-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #F8FAFC;
+    border-bottom: 1px solid var(--border);
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+  .zoom-controls {
+    display: flex;
+    gap: 6px;
+  }
+  .zoom-btn {
+    background: #fff;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--navy);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .map-viewport {
+    width: 100%;
+    height: 410px;
+    overflow: auto;
+    position: relative;
+    background: #EEF3F8;
+    touch-action: pan-x pan-y pinch-zoom;
+  }
+  .map-canvas {
+    width: 680px;
+    height: 470px;
+    transform-origin: 0 0;
+    transition: transform 0.15s ease-out;
+  }
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .pin-group {
+    cursor: pointer;
+  }
+  .pin-group circle.halo {
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .pin-group.selected circle.halo {
+    opacity: 0.35;
+  }
+
+  .detail-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--navy);
+    padding: 14px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 14px rgba(20,43,68,0.08);
+  }
+  .detail-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+  }
+  .detail-title {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 800;
+    color: #0F172A;
+  }
+  .detail-sub {
+    margin: 0 0 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy-light);
+  }
+  .detail-meta {
+    font-size: 12.5px;
+    color: #475569;
+    margin-bottom: 10px;
+  }
+  .detail-meta div { margin-bottom: 3px; }
+  .nav-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 9px 10px;
+    border-radius: 9px;
+    font-size: 12.5px;
+    font-weight: 700;
+    text-decoration: none;
+    text-align: center;
+  }
+  .nav-naver { background: #03C75A; color: #fff; }
+  .nav-google { background: #2563EB; color: #fff; }
+
+  .search-box {
+    position: relative;
+    margin-bottom: 10px;
+  }
+  .search-input {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 11px;
+    border: 1px solid #CBD5E1;
+    font-size: 14px;
+    background: #fff;
+    outline: none;
+  }
+  .search-input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(20,43,68,0.1);
+  }
+
+  .dong-filter {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    scrollbar-width: none;
+  }
+  .dong-filter::-webkit-scrollbar { display: none; }
+  .dong-btn {
+    border: 1px solid var(--border);
+    background: #F8FAFC;
+    color: #475569;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 11.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .dong-btn.active {
+    background: #1E293B;
+    color: #fff;
+    border-color: #1E293B;
+  }
+
+  .hub-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .hub-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .hub-item.selected {
+    border-color: var(--navy);
+    background: #F8FAFC;
+  }
+  .num-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .hub-info { flex: 1; min-width: 0; }
+  .hub-name {
+    font-size: 14px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 2px;
+  }
+  .hub-trans {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy-light);
+    margin-bottom: 4px;
+  }
+  .hub-addr {
+    font-size: 11.5px;
+    color: var(--muted);
+    word-break: keep-all;
+  }
+  .hub-tag {
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    background: #F1F5F9;
+    color: #334155;
+    padding: 2px 7px;
+    border-radius: 5px;
+  }
+
+  .cpr-card {
+    margin-top: 18px;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+  }
+  .cpr-card h3 {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    color: var(--red);
+  }
+  .cpr-steps {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 12.5px;
+    color: #334155;
+  }
+  .cpr-steps li { margin-bottom: 5px; }
+
+  .hidden { display: none !important; }
+  footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="title-wrap">
+      <h1 id="ui-title">언어를 넘는 119! 사상구 AED 안전지도</h1>
+      <p id="ui-subtitle">사상구 주요 거점 자동심장충격기 위치 안내</p>
+    </div>
+    <a href="tel:119" class="call-119">📞 119</a>
+  </div>
+  <div class="lang-bar">
+    <button class="lang-btn active" data-lang="kr">한국어</button>
+    <button class="lang-btn" data-lang="en">English</button>
+    <button class="lang-btn" data-lang="vi">Tiếng Việt</button>
+    <button class="lang-btn" data-lang="uz">O‘zbekcha</button>
+  </div>
+</header>
+
+<main>
+  <div class="alert-box" id="ui-alert">
+    🚨 위급 상황 시 즉시 <strong>119</strong>에 전화하고, 아래 지도에서 가장 가까운 <strong>AED</strong>를 확인하세요.
+  </div>
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tab-core" onclick="switchMode('core')">핵심 거점 24곳 (지도)</button>
+    <button class="mode-tab" id="tab-all" onclick="switchMode('all')">관내 전체 시설 검색 (139곳)</button>
+  </div>
+
+  <section id="core-section">
+    <div class="chips" id="cat-chips">
+      <button class="chip active" data-cat="all" id="chip-all">전체 (24)</button>
+      <button class="chip" data-cat="subway"><span class="dot" style="background:#0F8B4C"></span><span id="chip-subway">지하철·경전철 (9)</span></button>
+      <button class="chip" data-cat="admin"><span class="dot" style="background:#1D63B8"></span><span id="chip-admin">행정·문화 (4)</span></button>
+      <button class="chip" data-cat="welfare"><span class="dot" style="background:#E06D1B"></span><span id="chip-welfare">복지·청소년 (6)</span></button>
+      <button class="chip" data-cat="living"><span class="dot" style="background:#D62828"></span><span id="chip-living">교통·마트·공원 (5)</span></button>
+    </div>
+
+    <div class="map-card">
+      <div class="map-toolbar">
+        <span id="ui-map-hint">👆 번호 핀을 누르면 상세 위치와 길찾기가 열립니다</span>
+        <div class="zoom-controls">
+          <button class="zoom-btn" onclick="zoomMap(-0.15)" aria-label="축소">−</button>
+          <button class="zoom-btn" onclick="resetZoom()" aria-label="원래 크기">⟲</button>
+          <button class="zoom-btn" onclick="zoomMap(0.15)" aria-label="확대">+</button>
+        </div>
+      </div>
+      <div class="map-viewport" id="map-viewport">
+        <div class="map-canvas" id="map-canvas">
+          <svg viewBox="0 0 100 100" id="sasang-svg">
+            <rect x="0" y="0" width="100" height="100" fill="#EEF3F8"/>
+            <polygon points="0,0 12,0 11,22 10,45 11,65 13,85 14,100 0,100" fill="#CBE4F9"/>
+            <polyline points="12,0 11,22 10,45 11,65 13,85 14,100" fill="none" stroke="#96C8F2" stroke-width="0.6"/>
+            <text x="5.5" y="48" fill="#4A82B5" font-size="2.3" font-weight="bold" text-anchor="middle" id="svg-river-main">낙동강</text>
+            <text x="5.5" y="51.5" fill="#4A82B5" font-size="1.65" text-anchor="middle" id="svg-river-sub">Nakdong River</text>
+
+            <polygon points="12,54 21,56 23,88 14,89" fill="#DDF2D8" stroke="#A8D89E" stroke-width="0.4"/>
+            <text x="17.5" y="83" fill="#3B7A33" font-size="1.8" font-weight="bold" text-anchor="middle" id="svg-samnak">삼락생태공원</text>
+
+            <polygon points="79,0 100,0 100,100 83,100 86,70 84,40 79,18" fill="#E4EFE0"/>
+            <text x="91" y="50" fill="#5A7D52" font-size="1.95" font-weight="bold" text-anchor="middle" id="svg-baegyangsan">백양산 방면</text>
+
+            <polyline points="21,12 22,32 23,50 24,72 26,89" fill="none" stroke="#FFFFFF" stroke-width="1.6"/>
+            <polyline points="21,12 22,32 23,50 24,72 26,89" fill="none" stroke="#CBD5E1" stroke-width="0.4"/>
+            <text x="19.5" y="34" fill="#64748B" font-size="1.75" transform="rotate(-86 19.5,34)" id="svg-road-nakdong">낙동대로</text>
+
+            <polyline points="64.5,89 64,70 64.5,50 66.5,33 70,12" fill="none" stroke="#FFFFFF" stroke-width="1.4"/>
+            <polyline points="64.5,89 64,70 64.5,50 66.5,33 70,12" fill="none" stroke="#CBD5E1" stroke-width="0.4"/>
+            <text x="66.8" y="58" fill="#64748B" font-size="1.75" transform="rotate(88 66.8,58)" id="svg-road-baegyang">백양대로</text>
+
+            <polyline points="45,36 53.5,33.5 61,21 63,8" fill="none" stroke="#FFFFFF" stroke-width="1.3"/>
+            <polyline points="45,36 53.5,33.5 61,21 63,8" fill="none" stroke="#CBD5E1" stroke-width="0.4"/>
+
+            <polyline points="39.5,13.5 38.8,23.5 38,34.5 37,50 45,64 58,73.5 73,80" fill="none" stroke="#FFFFFF" stroke-width="2.2"/>
+            <polyline points="39.5,13.5 38.8,23.5 38,34.5 37,50 45,64 58,73.5 73,80" fill="none" stroke="#00A84D" stroke-width="1.1"/>
+            <text x="43" y="56" fill="#0F8B4C" font-size="1.75" font-weight="bold" transform="rotate(57 43,56)" id="svg-line2">도시철도 2호선</text>
+
+            <polyline points="34.5,46 27,38.5 10.5,33.5" fill="none" stroke="#88379B" stroke-width="1.0"/>
+            <text x="17" y="37.5" fill="#88379B" font-size="1.65" font-weight="bold" transform="rotate(16 17,37.5)" id="svg-lrt">부산김해경전철</text>
+
+            <g id="pins-layer"></g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-card" id="detail-card"></div>
+    <div class="hub-list" id="core-list"></div>
+  </section>
+
+  <section id="all-section" class="hidden">
+    <div class="search-box">
+      <input type="text" id="search-input" class="search-input" placeholder="기관명, 아파트, 복지관, 도로명 주소 검색..." oninput="renderAllList()" />
+    </div>
+    <div class="dong-filter" id="dong-filter"></div>
+    <div style="font-size:12px; color:#64748B; margin-bottom:8px;" id="all-count"></div>
+    <div class="hub-list" id="all-list"></div>
+  </section>
+
+  <div class="cpr-card">
+    <h3 id="ui-cpr-title">❤️ 심정지 환자 발견 시 3단계 행동요령</h3>
+    <ol class="cpr-steps" id="ui-cpr-steps">
+      <li><strong>119 신고 및 AED 요청:</strong> 주변 사람에게 큰 소리로 119 신고와 AED를 가져다 달라고 요청합니다.</li>
+      <li><strong>가슴압박 시작:</strong> 양손을 깍지 끼고 가슴 중앙을 강하고 빠르게(분당 100~120회, 약 5cm 깊이) 압박합니다.</li>
+      <li><strong>AED 도착 즉시 사용:</strong> 전원을 켜고 패드를 부착한 뒤 음성 안내에 따라 심장충격을 시행합니다.</li>
+    </ol>
+  </div>
+
+  <footer id="ui-footer">
+    부산광역시 사상소방서 · 사상구 자동심장충격기(AED) 현황 자료 기반
+  </footer>
+</main>
+
+<script>
+const CORE_HUBS = [{"id": 1, "cat": "subway", "dong": "괘법동", "x": 37.0, "y": 50.0, "kr": "사상역 (도시철도 2호선)", "en": "Sasang Station (Metro Line 2)", "vi": "Ga Sasang (Tuyến 2)", "uz": "Sasang bekati (2-liniya)", "map_kr": "사상역", "map_en": "Sasang Stn", "map_vi": "Ga Sasang", "map_uz": "Sasang", "addr_kr": "부산광역시 사상구 사상로 지하 203 (괘법동)", "cnt_kr": "1대", "note_kr": "지하철 대합실·개찰구 인근", "note_en": "Near subway concourse & ticket gates", "note_vi": "Gần sảnh và cổng soát vé tàu điện ngầm", "note_uz": "Metro zali va turniketlar yonida", "addr_en": "Sasang-gu, Busan, Sasang-ro B203 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro Hầm 203 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi Yerosti 203 (Gwaebeop-dong)", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"id": 2, "cat": "subway", "dong": "괘법동", "x": 34.5, "y": 54.0, "kr": "부산김해경전철 사상역", "en": "Gimhae LRT Sasang Station", "vi": "Ga Sasang (Đường sắt nhẹ)", "uz": "Gimhae LRT Sasang bekati", "map_kr": "경전철 사상역", "map_en": "LRT Sasang", "map_vi": "LRT Sasang", "map_uz": "LRT Sasang", "addr_kr": "부산광역시 사상구 광장로 83 (괘법동)", "cnt_kr": "1대", "note_kr": "경전철 역사 내 대합실", "note_en": "Inside Gimhae LRT station concourse", "note_vi": "Trong sảnh ga đường sắt nhẹ", "note_uz": "Yengil metro bekati zalida", "addr_en": "Sasang-gu, Busan, Gwangjang-ro 83 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gwangjang-ro 83 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Gwangjang-ro ko‘chasi 83 (Gwaebeop-dong)", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"id": 3, "cat": "subway", "dong": "괘법동", "x": 27.0, "y": 61.5, "kr": "부산김해경전철 괘법르네시떼역", "en": "Gwaebeop Renecite Station", "vi": "Ga Gwaebeop Renecite", "uz": "Gwaebeop Renecite bekati", "map_kr": "괘법르네시떼역", "map_en": "Renecite Stn", "map_vi": "Ga Renecite", "map_uz": "Renecite", "addr_kr": "부산광역시 사상구 광장로 9 (괘법동)", "cnt_kr": "1대", "note_kr": "경전철 정거장 대합실", "note_en": "LRT station concourse", "note_vi": "Sảnh ga Gwaebeop Renecite", "note_uz": "LRT bekati zalida", "addr_en": "Sasang-gu, Busan, Gwangjang-ro 9 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gwangjang-ro 9 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Gwangjang-ro ko‘chasi 9 (Gwaebeop-dong)", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"id": 4, "cat": "subway", "dong": "감전동", "x": 45.0, "y": 36.0, "kr": "감전역 (도시철도 2호선)", "en": "Gamjeon Station", "vi": "Ga Gamjeon", "uz": "Gamjeon bekati", "map_kr": "감전역", "map_en": "Gamjeon Stn", "map_vi": "Ga Gamjeon", "map_uz": "Gamjeon", "addr_kr": "부산광역시 사상구 사상로 지하 93-1 (감전동)", "cnt_kr": "1대", "note_kr": "지하철 역사 내 대합실", "note_en": "Inside subway station concourse", "note_vi": "Trong sảnh ga tàu điện ngầm", "note_uz": "Metro bekati zalida", "addr_en": "Sasang-gu, Busan, Sasang-ro B93-1 (Gamjeon-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro Hầm 93-1 (Phường Gamjeon)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi Yerosti 93-1 (Gamjeon-dong)", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"id": 5, "cat": "subway", "dong": "주례동", "x": 58.0, "y": 26.5, "kr": "주례역 (도시철도 2호선)", "en": "Jurye Station", "vi": "Ga Jurye", "uz": "Jurye bekati", "map_kr": "주례역", "map_en": "Jurye Stn", "map_vi": "Ga Jurye", "map_uz": "Jurye", "addr_kr": "부산광역시 사상구 가야대로 지하 292 (주례동)", "cnt_kr": "1대", "note_kr": "지하철 역사 내 대합실", "note_en": "Inside subway station concourse", "note_vi": "Trong sảnh ga tàu điện ngầm", "note_uz": "Metro bekati zalida", "addr_en": "Sasang-gu, Busan, Gaya-daero B292 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gaya-daero Hầm 292 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Gaya-daero ko‘chasi Yerosti 292 (Jurye-dong)", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"id": 6, "cat": "subway", "dong": "주례동", "x": 73.0, "y": 20.0, "kr": "냉정역 (도시철도 2호선)", "en": "Naengjeong Station", "vi": "Ga Naengjeong", "uz": "Naengjeong bekati", "map_kr": "냉정역", "map_en": "Naengjeong Stn", "map_vi": "Ga Naengjeong", "map_uz": "Naengjeong", "addr_kr": "부산광역시 사상구 가야대로 지하 362-1 (주례동)", "cnt_kr": "1대", "note_kr": "지하철 역사 내 대합실", "note_en": "Inside subway station concourse", "note_vi": "Trong sảnh ga tàu điện ngầm", "note_uz": "Metro bekati zalida", "addr_en": "Sasang-gu, Busan, Gaya-daero B362-1 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gaya-daero Hầm 362-1 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Gaya-daero ko‘chasi Yerosti 362-1 (Jurye-dong)", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"id": 7, "cat": "subway", "dong": "덕포동", "x": 38.0, "y": 65.5, "kr": "덕포역 (도시철도 2호선)", "en": "Deokpo Station", "vi": "Ga Deokpo", "uz": "Deokpo bekati", "map_kr": "덕포역", "map_en": "Deokpo Stn", "map_vi": "Ga Deokpo", "map_uz": "Deokpo", "addr_kr": "부산광역시 사상구 사상로 지하 320-1 (덕포동)", "cnt_kr": "1대", "note_kr": "지하철 역사 내 대합실", "note_en": "Inside subway station concourse", "note_vi": "Trong sảnh ga tàu điện ngầm", "note_uz": "Metro bekati zalida", "addr_en": "Sasang-gu, Busan, Sasang-ro B320-1 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro Hầm 320-1 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi Yerosti 320-1 (Deokpo-dong)", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"id": 8, "cat": "subway", "dong": "덕포동", "x": 38.8, "y": 76.5, "kr": "모덕역 (도시철도 2호선)", "en": "Modeok Station", "vi": "Ga Modeok", "uz": "Modeok bekati", "map_kr": "모덕역", "map_en": "Modeok Stn", "map_vi": "Ga Modeok", "map_uz": "Modeok", "addr_kr": "부산광역시 사상구 사상로 지하 409 (덕포동)", "cnt_kr": "1대", "note_kr": "지하철 역사 내 대합실", "note_en": "Inside subway station concourse", "note_vi": "Trong sảnh ga tàu điện ngầm", "note_uz": "Metro bekati zalida", "addr_en": "Sasang-gu, Busan, Sasang-ro B409 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro Hầm 409 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi Yerosti 409 (Deokpo-dong)", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"id": 9, "cat": "subway", "dong": "모라동", "x": 39.5, "y": 86.5, "kr": "모라역 (도시철도 2호선)", "en": "Mora Station", "vi": "Ga Mora", "uz": "Mora bekati", "map_kr": "모라역", "map_en": "Mora Stn", "map_vi": "Ga Mora", "map_uz": "Mora", "addr_kr": "부산광역시 사상구 사상로 지하 498 (모라동)", "cnt_kr": "1대", "note_kr": "지하철 역사 내 대합실", "note_en": "Inside subway station concourse", "note_vi": "Trong sảnh ga tàu điện ngầm", "note_uz": "Metro bekati zalida", "addr_en": "Sasang-gu, Busan, Sasang-ro B498 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro Hầm 498 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi Yerosti 498 (Mora-dong)", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"id": 10, "cat": "admin", "dong": "감전동", "x": 53.5, "y": 34.5, "kr": "사상구청 / 사상구보건소", "en": "Sasang-gu Office & Health Center", "vi": "UBND & Trạm Y tế Quận Sasang", "uz": "Sasang tuman hokimligi va Sog‘liqni saqlash markazi", "map_kr": "사상구청·보건소", "map_en": "Sasang Office", "map_vi": "UBND Sasang", "map_uz": "Hokimlik", "addr_kr": "부산광역시 사상구 학감대로 242 (감전동)", "cnt_kr": "2대 (청사 1·보건소 1)", "note_kr": "구청 민원실·보건소 로비", "note_en": "District Office & Health Center lobby", "note_vi": "Sảnh UBND và Trạm Y tế", "note_uz": "Hokimlik va Sog‘liqni saqlash markazi foyesi", "addr_en": "Sasang-gu, Busan, Haggam-daero 242 (Gamjeon-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 242 (Phường Gamjeon)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero ko‘chasi 242 (Gamjeon-dong)", "cnt_en": "2 units (Office 1·Health Ctr 1)", "cnt_vi": "2 máy AED (Tòa nhà 1·Trạm y tế 1)", "cnt_uz": "2 ta AED (Bino 1·Salomatlik markazi 1)"}, {"id": 11, "cat": "admin", "dong": "덕포동", "x": 46.5, "y": 64.5, "kr": "부산도서관", "en": "Busan Library", "vi": "Thư viện Busan", "uz": "Busan kutubxonasi", "map_kr": "부산도서관", "map_en": "Busan Library", "map_vi": "TV Busan", "map_uz": "Busan Kutubxona", "addr_kr": "부산광역시 사상구 사상로310번길 33 (덕포동)", "cnt_kr": "2대", "note_kr": "도서관 주요 층 로비", "note_en": "Main floor lobby", "note_vi": "Sảnh chính thư viện", "note_uz": "Kutubxona asosiy foyesi", "addr_en": "Sasang-gu, Busan, Sasang-ro 310beon-gil 33 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro 310beon-gil 33 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro 310beon-gil ko‘chasi 33 (Deokpo-dong)", "cnt_en": "2 units", "cnt_vi": "2 máy AED", "cnt_uz": "2 ta AED"}, {"id": 12, "cat": "admin", "dong": "덕포동", "x": 47.5, "y": 73.5, "kr": "사상도서관 / 사상구국제화센터", "en": "Sasang Library & Global Center", "vi": "Thư viện Sasang & TT Quốc tế", "uz": "Sasang kutubxonasi va Xalqaro markaz", "map_kr": "사상도서관·국제화센터", "map_en": "Sasang Lib & Global", "map_vi": "TV Sasang & Quốc tế", "map_uz": "Sasang & Xalqaro", "addr_kr": "부산광역시 사상구 덕상로72번길 9·27 (덕포동)", "cnt_kr": "3대 (도서관 1·국제화센터 2)", "note_kr": "도서관 및 국제화센터 내부", "note_en": "Inside Library & Global Center", "note_vi": "Bên trong thư viện và trung tâm quốc tế", "note_uz": "Kutubxona va Xalqaro markaz ichida", "addr_en": "Sasang-gu, Busan, Deoksang-ro 72beon-gil 9·27 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Deoksang-ro 72beon-gil 9·27 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Deoksang-ro 72beon-gil ko‘chasi 9·27 (Deokpo-dong)", "cnt_en": "3 units (Library 1·Global Ctr 2)", "cnt_vi": "3 máy AED (Thư viện 1·TT Quốc tế 2)", "cnt_uz": "3 ta AED (Kutubxona 1·Xalqaro markaz 2)"}, {"id": 13, "cat": "admin", "dong": "감전동", "x": 47.5, "y": 44.5, "kr": "사상평생학습관", "en": "Sasang Lifelong Learning Center", "vi": "TT Học tập Suốt đời Sasang", "uz": "Sasang umrbod ta’lim markazi", "map_kr": "사상평생학습관", "map_en": "Lifelong Learning", "map_vi": "TT Học tập", "map_uz": "Ta’lim markazi", "addr_kr": "부산광역시 사상구 새벽로168번길 61 (감전동)", "cnt_kr": "1대", "note_kr": "학습관 출입구 로비", "note_en": "Main entrance lobby", "note_vi": "Sảnh lối vào chính", "note_uz": "Asosiy kirish foyesi", "addr_en": "Sasang-gu, Busan, Saebyeok-ro 168beon-gil 61 (Gamjeon-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Saebyeok-ro 168beon-gil 61 (Phường Gamjeon)", "addr_uz": "Sasang tumani, Busan shahri, Saebyeok-ro 168beon-gil ko‘chasi 61 (Gamjeon-dong)", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"id": 14, "cat": "welfare", "dong": "학장동", "x": 61.0, "y": 20.5, "kr": "사상구 다누림센터 (보건소·노인복지회관)", "en": "Sasang Danurim Center", "vi": "Trung tâm Danurim Sasang", "uz": "Sasang Danurim markazi", "map_kr": "다누림센터", "map_en": "Danurim Ctr", "map_vi": "TT Danurim", "map_uz": "Danurim", "addr_kr": "부산광역시 사상구 가야대로196번길 51 (학장동)", "cnt_kr": "5대 (다누림센타 4·노인복지회관 1)", "note_kr": "다누림센터 및 노인복지회관 주요 층", "note_en": "Danurim Center & Senior Welfare floors", "note_vi": "Các tầng chính Trung tâm Danurim", "note_uz": "Danurim markazi asosiy qavatlari", "addr_en": "Sasang-gu, Busan, Gaya-daero 196beon-gil 51 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gaya-daero 196beon-gil 51 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Gaya-daero 196beon-gil ko‘chasi 51 (Hakjang-dong)", "cnt_en": "5 units (Danurim Ctr 4·Senior Welfare 1)", "cnt_vi": "5 máy AED (TT Danurim 4·Nhà người cao tuổi 1)", "cnt_uz": "5 ta AED (Danurim markazi 4·Faxriylar markazi 1)"}, {"id": 15, "cat": "welfare", "dong": "괘법동", "x": 25.0, "y": 50.5, "kr": "사상구육아종합지원센터", "en": "Sasang Childcare Support Center", "vi": "TT Hỗ trợ Nuôi dạy Trẻ Sasang", "uz": "Sasang bolalarni qo‘llab-quvvatlash markazi", "map_kr": "육아종합지원센터", "map_en": "Childcare Ctr", "map_vi": "TT Nuôi dạy Trẻ", "map_uz": "Bolalar markazi", "addr_kr": "부산광역시 사상구 낙동대로1210번길 17 (괘법동)", "cnt_kr": "1대", "note_kr": "센터 1층 안내데스크 인근", "note_en": "Near 1F reception desk", "note_vi": "Gần quầy lễ tân tầng 1", "note_uz": "1-qavat qabulxonasi yonida", "addr_en": "Sasang-gu, Busan, Nakdong-daero 1210beon-gil 17 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Nakdong-daero 1210beon-gil 17 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Nakdong-daero 1210beon-gil ko‘chasi 17 (Gwaebeop-dong)", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"id": 16, "cat": "welfare", "dong": "주례동", "x": 65.5, "y": 34.0, "kr": "사상구종합사회복지관", "en": "Sasang Social Welfare Center", "vi": "TT Phúc lợi Xã hội Sasang", "uz": "Sasang ijtimoiy farovonlik markazi", "map_kr": "사상구종합사회복지관", "map_en": "Sasang Welfare", "map_vi": "TT Phúc lợi", "map_uz": "Farovonlik markazi", "addr_kr": "부산광역시 사상구 백양대로 527 (주례동)", "cnt_kr": "2대", "note_kr": "복지관 주 출입구·로비", "note_en": "Welfare center main lobby", "note_vi": "Sảnh chính trung tâm phúc lợi", "note_uz": "Markaz asosiy foyesi", "addr_en": "Sasang-gu, Busan, Baegyang-daero 527 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 527 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 527 (Jurye-dong)", "cnt_en": "2 units", "cnt_vi": "2 máy AED", "cnt_uz": "2 ta AED"}, {"id": 17, "cat": "welfare", "dong": "학장동", "x": 62.5, "y": 10.5, "kr": "학장종합사회복지관", "en": "Hakjang Social Welfare Center", "vi": "TT Phúc lợi Xã hội Hakjang", "uz": "Hakjang ijtimoiy farovonlik markazi", "map_kr": "학장종합사회복지관", "map_en": "Hakjang Welfare", "map_vi": "TT Hakjang", "map_uz": "Hakjang markazi", "addr_kr": "부산광역시 사상구 학감대로49번길 28-70 (학장동)", "cnt_kr": "1대", "note_kr": "학장사회복지관 별관 1층", "note_en": "Annex 1F lobby", "note_vi": "Tầng 1 khu phụ trung tâm phúc lợi", "note_uz": "Qo‘shimcha bino 1-qavati", "addr_en": "Sasang-gu, Busan, Haggam-daero 49beon-gil 28-70 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 49beon-gil 28-70 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero 49beon-gil ko‘chasi 28-70 (Hakjang-dong)", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"id": 18, "cat": "welfare", "dong": "모라동", "x": 63.5, "y": 86.5, "kr": "모라종합사회복지관 / 사상구장애인복지관", "en": "Mora & Disability Welfare Centers", "vi": "TT Phúc lợi Mora & Người khuyết tật", "uz": "Mora va Nogironlar farovonlik markazi", "map_kr": "모라·장애인복지관", "map_en": "Mora Welfare", "map_vi": "TT Mora", "map_uz": "Mora markazi", "addr_kr": "부산광역시 사상구 모라로110번길 129 / 모라로192번길 21 (모라동)", "cnt_kr": "2대 (각 1대)", "note_kr": "각 복지관 1층 로비", "note_en": "1F lobby of each welfare center", "note_vi": "Sảnh tầng 1 mỗi trung tâm", "note_uz": "Har bir markazning 1-qavat foyesi", "addr_en": "Sasang-gu, Busan, Mora-ro 110beon-gil 129 / Mora-ro 192beon-gil 21 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Mora-ro 110beon-gil 129 / Đường Mora-ro 192beon-gil 21 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Mora-ro 110beon-gil ko‘chasi 129 / Mora-ro 192beon-gil ko‘chasi 21 (Mora-dong)", "cnt_en": "2 units (각 1 unit)", "cnt_vi": "2 máy AED (각 1 máy AED)", "cnt_uz": "2 ta AED (각 1 ta AED)"}, {"id": 19, "cat": "welfare", "dong": "모라동", "x": 55.5, "y": 80.5, "kr": "사상구청소년수련관", "en": "Sasang Youth Center", "vi": "TT Thanh thiếu niên Sasang", "uz": "Sasang yoshlar markazi", "map_kr": "사상구청소년수련관", "map_en": "Youth Center", "map_vi": "TT Thanh thiếu niên", "map_uz": "Yoshlar markazi", "addr_kr": "부산광역시 사상구 덕상로 129 (모라동)", "cnt_kr": "2대", "note_kr": "수련관 안내실·주요 층", "note_en": "Information desk & main floors", "note_vi": "Quầy hướng dẫn và tầng chính", "note_uz": "Ma’lumot stoli va asosiy qavatlar", "addr_en": "Sasang-gu, Busan, Deoksang-ro 129 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Deoksang-ro 129 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Deoksang-ro ko‘chasi 129 (Mora-dong)", "cnt_en": "2 units", "cnt_vi": "2 máy AED", "cnt_uz": "2 ta AED"}, {"id": 20, "cat": "living", "dong": "괘법동", "x": 36.2, "y": 44.5, "kr": "서부시외버스터미널", "en": "Seobu Intercity Bus Terminal", "vi": "Bến xe Liên tỉnh Seobu", "uz": "Seobu shaharlararo avtovokzali", "map_kr": "서부시외버스터미널", "map_en": "Seobu Bus Term", "map_vi": "Bến xe Seobu", "map_uz": "Seobu avtovokzal", "addr_kr": "부산광역시 사상구 사상로 201 (괘법동)", "cnt_kr": "1대", "note_kr": "여객터미널 대합실", "note_en": "Passenger terminal waiting hall", "note_vi": "Phòng chờ bến xe khách", "note_uz": "Yo‘lovchilar kutish zali", "addr_en": "Sasang-gu, Busan, Sasang-ro 201 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro 201 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi 201 (Gwaebeop-dong)", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"id": 21, "cat": "living", "dong": "괘법동", "x": 30.8, "y": 53.0, "kr": "이마트 사상점 / 홈플러스 서부산점", "en": "E-Mart Sasang & Homeplus Seobusan", "vi": "E-Mart & Homeplus (Sasang)", "uz": "E-Mart va Homeplus (Sasang)", "map_kr": "이마트·홈플러스", "map_en": "E-Mart / Homeplus", "map_vi": "E-Mart / Homeplus", "map_uz": "E-Mart / Homeplus", "addr_kr": "부산광역시 사상구 광장로 17 / 광장로 7 (괘법동)", "cnt_kr": "2대 (각 1대)", "note_kr": "매장 고객만족센터·주출입구 인근", "note_en": "Near customer service / main entrance", "note_vi": "Gần quầy dịch vụ khách hàng / cửa chính", "note_uz": "Mijozlar xizmati / asosiy kirish yonida", "addr_en": "Sasang-gu, Busan, Gwangjang-ro 17 / Gwangjang-ro 7 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gwangjang-ro 17 / Đường Gwangjang-ro 7 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Gwangjang-ro ko‘chasi 17 / Gwangjang-ro ko‘chasi 7 (Gwaebeop-dong)", "cnt_en": "2 units (각 1 unit)", "cnt_vi": "2 máy AED (각 1 máy AED)", "cnt_uz": "2 ta AED (각 1 ta AED)"}, {"id": 22, "cat": "living", "dong": "엄궁동", "x": 22.0, "y": 21.5, "kr": "롯데마트 사상점", "en": "Lotte Mart Sasang", "vi": "Lotte Mart Sasang", "uz": "Lotte Mart Sasang", "map_kr": "롯데마트 사상점", "map_en": "Lotte Mart", "map_vi": "Lotte Mart", "map_uz": "Lotte Mart", "addr_kr": "부산광역시 사상구 낙동대로 733 (엄궁동)", "cnt_kr": "1대", "note_kr": "매장 고객센터 인근", "note_en": "Near store customer service", "note_vi": "Gần quầy dịch vụ khách hàng", "note_uz": "Do‘kon mijozlar markazi yonida", "addr_en": "Sasang-gu, Busan, Nakdong-daero 733 (Eomgung-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Nakdong-daero 733 (Phường Eomgung)", "addr_uz": "Sasang tumani, Busan shahri, Nakdong-daero ko‘chasi 733 (Eomgung-dong)", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"id": 23, "cat": "living", "dong": "삼락동", "x": 18.0, "y": 74.0, "kr": "삼락생태공원 (강변공원관리사무소 등)", "en": "Samnak Ecological Park", "vi": "Công viên Sinh thái Samnak", "uz": "Samnak ekoparki", "map_kr": "삼락생태공원", "map_en": "Samnak Park", "map_vi": "CV Samnak", "map_uz": "Samnak bog‘i", "addr_kr": "부산광역시 사상구 낙동대로 1231 (삼락동)", "cnt_kr": "6대 (공원 4·오토캠핑장 1·수상레포츠 1)", "note_kr": "강변공원관리사무소·캠핑장·수상레포츠시설", "note_en": "Park management office, campsite & water sports", "note_vi": "Văn phòng quản lý công viên, khu cắm trại", "note_uz": "Bog‘ boshqarmasi, kemping va suv sporti zonasi", "addr_en": "Sasang-gu, Busan, Nakdong-daero 1231 (Samnak-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Nakdong-daero 1231 (Phường Samnak)", "addr_uz": "Sasang tumani, Busan shahri, Nakdong-daero ko‘chasi 1231 (Samnak-dong)", "cnt_en": "6 units (Park 4·Campsite 1·Water Sports 1)", "cnt_vi": "6 máy AED (Công viên 4·Khu cắm trại 1·Thể thao dưới nước 1)", "cnt_uz": "6 ta AED (Bog‘ 4·Kemping 1·Suv sporti 1)"}, {"id": 24, "cat": "living", "dong": "감전동", "x": 64.0, "y": 48.0, "kr": "사상근린공원", "en": "Sasang Neighborhood Park", "vi": "Công viên Sasang", "uz": "Sasang mahalla bog‘i", "map_kr": "사상근린공원", "map_en": "Sasang Park", "map_vi": "CV Sasang", "map_uz": "Sasang bog‘i", "addr_kr": "부산광역시 사상구 백양대로 570 (감전동)", "cnt_kr": "1대", "note_kr": "공원 내 관리시설 인근", "note_en": "Near park management facility", "note_vi": "Gần khu quản lý trong công viên", "note_uz": "Bog‘ ichidagi boshqaruv binosi yonida", "addr_en": "Sasang-gu, Busan, Baegyang-daero 570 (Gamjeon-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 570 (Phường Gamjeon)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 570 (Gamjeon-dong)", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}];
+const ALL_FACILITIES = [{"name": "괘법LH아파트", "cat_raw": "500세대 미만", "addr_kr": "부산광역시 사상구 광장로21번길 66", "addr_en": "Sasang-gu, Busan, Gwangjang-ro 21beon-gil 66", "addr_vi": "Quận Sasang, TP. Busan, Đường Gwangjang-ro 21beon-gil 66", "addr_uz": "Sasang tumani, Busan shahri, Gwangjang-ro 21beon-gil ko‘chasi 66", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상구보건소", "cat_raw": "공공보건의료기관", "addr_kr": "부산광역시 사상구 학감대로 242, 사상구청 (감전동)", "addr_en": "Sasang-gu, Busan, Haggam-daero 242, 사상구청 (Gamjeon-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 242, 사상구청 (Phường Gamjeon)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero ko‘chasi 242, 사상구청 (Gamjeon-dong)", "dong": "감전동", "dong_en": "Gamjeon-dong", "dong_vi": "Phường Gamjeon", "dong_uz": "Gamjeon-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "부산시립정신병원", "cat_raw": "공공보건의료기관", "addr_kr": "부산광역시 사상구 학감대로39번길 104-36, 부산시립정신병원 (학장동)", "addr_en": "Sasang-gu, Busan, Haggam-daero 39beon-gil 104-36, 부산시립정신병원 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 39beon-gil 104-36, 부산시립정신병원 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero 39beon-gil ko‘chasi 104-36, 부산시립정신병원 (Hakjang-dong)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "2 대", "cnt_en": "2 units", "cnt_vi": "2 máy AED", "cnt_uz": "2 ta AED"}, {"name": "한국보훈복지의료공단부산요양병원", "cat_raw": "공공보건의료기관", "addr_kr": "부산광역시 사상구 백양대로 420, 보훈병원 (주례동)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 420, 보훈병원 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 420, 보훈병원 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 420, 보훈병원 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "5 대", "cnt_en": "5 units", "cnt_vi": "5 máy AED", "cnt_uz": "5 ta AED"}, {"name": "부산보훈병원", "cat_raw": "공공보건의료기관", "addr_kr": "부산광역시 사상구 백양대로 420, 보훈병원 (주례동)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 420, 보훈병원 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 420, 보훈병원 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 420, 보훈병원 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "8 대", "cnt_en": "8 units", "cnt_vi": "8 máy AED", "cnt_uz": "8 ta AED"}, {"name": "사상중흥S-클래스그랜드센트럴", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 사상로 300 (덕포동, 사상중흥S-클래스그랜드센트럴)", "addr_en": "Sasang-gu, Busan, Sasang-ro 300 (Deokpo-dong, 사상중흥S-클래스그랜드센트럴)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro 300 (Phường Deokpo, 사상중흥S-클래스그랜드센트럴)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi 300 (Deokpo-dong, 사상중흥S-클래스그랜드센트럴)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "엄궁한신2차아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 엄궁로 40 (엄궁동) 엄궁2차한신아파트", "addr_en": "Sasang-gu, Busan, Eomgung-ro 40 (Eomgung-dong) 엄궁2차한신아파트", "addr_vi": "Quận Sasang, TP. Busan, Đường Eomgung-ro 40 (Phường Eomgung) 엄궁2차한신아파트", "addr_uz": "Sasang tumani, Busan shahri, Eomgung-ro ko‘chasi 40 (Eomgung-dong) 엄궁2차한신아파트", "dong": "엄궁동", "dong_en": "Eomgung-dong", "dong_vi": "Phường Eomgung", "dong_uz": "Eomgung-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "엄궁롯데캐슬리버아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 엄궁북로4번가길 62 (엄궁동)", "addr_en": "Sasang-gu, Busan, Eomgungbuk-ro 4beonga-gil 62 (Eomgung-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Eomgungbuk-ro 4beonga-gil 62 (Phường Eomgung)", "addr_uz": "Sasang tumani, Busan shahri, Eomgungbuk-ro 4beonga-gil ko‘chasi 62 (Eomgung-dong)", "dong": "엄궁동", "dong_en": "Eomgung-dong", "dong_vi": "Phường Eomgung", "dong_uz": "Eomgung-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "주례롯데캐슬골드스마트아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 가야대로255번길 5(주례동, 주례롯데캐슬골드스마트)", "addr_en": "Sasang-gu, Busan, Gaya-daero 255beon-gil 5(Jurye-dong, 주례롯데캐슬골드스마트)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gaya-daero 255beon-gil 5(Phường Jurye, 주례롯데캐슬골드스마트)", "addr_uz": "Sasang tumani, Busan shahri, Gaya-daero 255beon-gil ko‘chasi 5(Jurye-dong, 주례롯데캐슬골드스마트)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "센트럴스타힐스아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 사상로223번길 23(괘법동, 센트럴 스타힐스)", "addr_en": "Sasang-gu, Busan, Sasang-ro 223beon-gil 23(Gwaebeop-dong, 센트럴 스타힐스)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro 223beon-gil 23(Phường Gwaebeop, 센트럴 스타힐스)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro 223beon-gil ko‘chasi 23(Gwaebeop-dong, 센트럴 스타힐스)", "dong": "괘법동", "dong_en": "Gwaebeop-dong", "dong_vi": "Phường Gwaebeop", "dong_uz": "Gwaebeop-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "엄궁코오롱아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 엄궁로 144, 코오롱아파트 (엄궁동)", "addr_en": "Sasang-gu, Busan, Eomgung-ro 144, 코오롱아파트 (Eomgung-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Eomgung-ro 144, 코오롱아파트 (Phường Eomgung)", "addr_uz": "Sasang tumani, Busan shahri, Eomgung-ro ko‘chasi 144, 코오롱아파트 (Eomgung-dong)", "dong": "엄궁동", "dong_en": "Eomgung-dong", "dong_vi": "Phường Eomgung", "dong_uz": "Eomgung-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "학장벽산아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 학감대로 105-21", "addr_en": "Sasang-gu, Busan, Haggam-daero 105-21", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 105-21", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero ko‘chasi 105-21", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "학장무학아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 대동로 84", "addr_en": "Sasang-gu, Busan, Daedong-ro 84", "addr_vi": "Quận Sasang, TP. Busan, Đường Daedong-ro 84", "addr_uz": "Sasang tumani, Busan shahri, Daedong-ro ko‘chasi 84", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "학장삼정그린코아아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 학감대로123번길 67", "addr_en": "Sasang-gu, Busan, Haggam-daero 123beon-gil 67", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 123beon-gil 67", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero 123beon-gil ko‘chasi 67", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "학장금강아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 대동로64번길 25", "addr_en": "Sasang-gu, Busan, Daedong-ro 64beon-gil 25", "addr_vi": "Quận Sasang, TP. Busan, Đường Daedong-ro 64beon-gil 25", "addr_uz": "Sasang tumani, Busan shahri, Daedong-ro 64beon-gil ko‘chasi 25", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "엄궁쌍용스윗닷홈아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 엄궁로 100", "addr_en": "Sasang-gu, Busan, Eomgung-ro 100", "addr_vi": "Quận Sasang, TP. Busan, Đường Eomgung-ro 100", "addr_uz": "Sasang tumani, Busan shahri, Eomgung-ro ko‘chasi 100", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "주례청구아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 백양대로494번길 38", "addr_en": "Sasang-gu, Busan, Baegyang-daero 494beon-gil 38", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 494beon-gil 38", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero 494beon-gil ko‘chasi 38", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "엄궁대림아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 엄궁로 154", "addr_en": "Sasang-gu, Busan, Eomgung-ro 154", "addr_vi": "Quận Sasang, TP. Busan, Đường Eomgung-ro 154", "addr_uz": "Sasang tumani, Busan shahri, Eomgung-ro ko‘chasi 154", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "구덕대림아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 학감대로49번길 62", "addr_en": "Sasang-gu, Busan, Haggam-daero 49beon-gil 62", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 49beon-gil 62", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero 49beon-gil ko‘chasi 62", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "주례반도보라매머드타운", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 백양대로 372-22  (주례동, 반도보라메머드타운)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 372-22 (Jurye-dong, 반도보라메머드타운)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 372-22 (Phường Jurye, 반도보라메머드타운)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 372-22 (Jurye-dong, 반도보라메머드타운)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "주례럭키아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 가야대로284번길 12", "addr_en": "Sasang-gu, Busan, Gaya-daero 284beon-gil 12", "addr_vi": "Quận Sasang, TP. Busan, Đường Gaya-daero 284beon-gil 12", "addr_uz": "Sasang tumani, Busan shahri, Gaya-daero 284beon-gil ko‘chasi 12", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "신구덕우성아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 학감대로 109-16 (학장동) 신구덕우성아파트", "addr_en": "Sasang-gu, Busan, Haggam-daero 109-16 (Hakjang-dong) 신구덕우성아파트", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 109-16 (Phường Hakjang) 신구덕우성아파트", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero ko‘chasi 109-16 (Hakjang-dong) 신구덕우성아파트", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "구학마을아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 학감대로49번길 28-19 (학장동,구학마을아파트)", "addr_en": "Sasang-gu, Busan, Haggam-daero 49beon-gil 28-19 (Hakjang-dong,구학마을아파트)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 49beon-gil 28-19 (Phường Hakjang,구학마을아파트)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero 49beon-gil ko‘chasi 28-19 (Hakjang-dong,구학마을아파트)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "괘법한신2차아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 낙동대로1210번길 33 (괘법동) 한신2차아파트", "addr_en": "Sasang-gu, Busan, Nakdong-daero 1210beon-gil 33 (Gwaebeop-dong) 한신2차아파트", "addr_vi": "Quận Sasang, TP. Busan, Đường Nakdong-daero 1210beon-gil 33 (Phường Gwaebeop) 한신2차아파트", "addr_uz": "Sasang tumani, Busan shahri, Nakdong-daero 1210beon-gil ko‘chasi 33 (Gwaebeop-dong) 한신2차아파트", "dong": "괘법동", "dong_en": "Gwaebeop-dong", "dong_vi": "Phường Gwaebeop", "dong_uz": "Gwaebeop-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "덕포경동메르빌아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 덕상로 8-37 덕포경동메르빌아파트", "addr_en": "Sasang-gu, Busan, Deoksang-ro 8-37 덕포경동메르빌아파트", "addr_vi": "Quận Sasang, TP. Busan, Đường Deoksang-ro 8-37 덕포경동메르빌아파트", "addr_uz": "Sasang tumani, Busan shahri, Deoksang-ro ko‘chasi 8-37 덕포경동메르빌아파트", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "학장반도보라타운아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 대동로 98  (학장동, 학장반도보라타운)", "addr_en": "Sasang-gu, Busan, Daedong-ro 98 (Hakjang-dong, 학장반도보라타운)", "addr_vi": "Quận Sasang, TP. Busan, Đường Daedong-ro 98 (Phường Hakjang, 학장반도보라타운)", "addr_uz": "Sasang tumani, Busan shahri, Daedong-ro ko‘chasi 98 (Hakjang-dong, 학장반도보라타운)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "모라벽산아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 백양대로934번길 84  (모라동, 모라벽산아파트)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 934beon-gil 84 (Mora-dong, 모라벽산아파트)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 934beon-gil 84 (Phường Mora, 모라벽산아파트)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero 934beon-gil ko‘chasi 84 (Mora-dong, 모라벽산아파트)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "현대무지개타운아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 주례로 93", "addr_en": "Sasang-gu, Busan, Jurye-ro 93", "addr_vi": "Quận Sasang, TP. Busan, Đường Jurye-ro 93", "addr_uz": "Sasang tumani, Busan shahri, Jurye-ro ko‘chasi 93", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "모라동원타운", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 백양대로 879  (모라동, 동원아파트)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 879 (Mora-dong, 동원아파트)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 879 (Phường Mora, 동원아파트)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 879 (Mora-dong, 동원아파트)", "dong": "모라동, 동", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상강변동원아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 낙동대로1210번길 34", "addr_en": "Sasang-gu, Busan, Nakdong-daero 1210beon-gil 34", "addr_vi": "Quận Sasang, TP. Busan, Đường Nakdong-daero 1210beon-gil 34", "addr_uz": "Sasang tumani, Busan shahri, Nakdong-daero 1210beon-gil ko‘chasi 34", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "모라우성아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 백양대로 906  (모라동, 우성아파트)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 906 (Mora-dong, 우성아파트)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 906 (Phường Mora, 우성아파트)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 906 (Mora-dong, 우성아파트)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "백양그린아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 모라로110번길 88  (모라동, 백양그린아파트)", "addr_en": "Sasang-gu, Busan, Mora-ro 110beon-gil 88 (Mora-dong, 백양그린아파트)", "addr_vi": "Quận Sasang, TP. Busan, Đường Mora-ro 110beon-gil 88 (Phường Mora, 백양그린아파트)", "addr_uz": "Sasang tumani, Busan shahri, Mora-ro 110beon-gil ko‘chasi 88 (Mora-dong, 백양그린아파트)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "자유아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 백양대로 820  (덕포동, 자유아파트)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 820 (Deokpo-dong, 자유아파트)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 820 (Phường Deokpo, 자유아파트)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 820 (Deokpo-dong, 자유아파트)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "학장도개공임대아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 학감대로49번길 28-39", "addr_en": "Sasang-gu, Busan, Haggam-daero 49beon-gil 28-39", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 49beon-gil 28-39", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero 49beon-gil ko‘chasi 28-39", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "주례한일유앤아이아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 백양대로 372-15", "addr_en": "Sasang-gu, Busan, Baegyang-daero 372-15", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 372-15", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 372-15", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "목화아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 대동로 104-6  (학장동)", "addr_en": "Sasang-gu, Busan, Daedong-ro 104-6 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Daedong-ro 104-6 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Daedong-ro ko‘chasi 104-6 (Hakjang-dong)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "주례경동리인아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 백양대로 526  (주례동, 경동 리인)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 526 (Jurye-dong, 경동 리인)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 526 (Phường Jurye, 경동 리인)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 526 (Jurye-dong, 경동 리인)", "dong": "주례동, 경동", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "LG신주례2단지아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 백양대로342번길 17  (주례동, 엘지신주례아파트)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 342beon-gil 17 (Jurye-dong, 엘지신주례아파트)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 342beon-gil 17 (Phường Jurye, 엘지신주례아파트)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero 342beon-gil ko‘chasi 17 (Jurye-dong, 엘지신주례아파트)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "모라주공4단지아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 모라로192번길 50  (모라동, 주공아파트4단지)", "addr_en": "Sasang-gu, Busan, Mora-ro 192beon-gil 50 (Mora-dong, 주공아파트4단지)", "addr_vi": "Quận Sasang, TP. Busan, Đường Mora-ro 192beon-gil 50 (Phường Mora, 주공아파트4단지)", "addr_uz": "Sasang tumani, Busan shahri, Mora-ro 192beon-gil ko‘chasi 50 (Mora-dong, 주공아파트4단지)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "우신모라아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 백양대로 880", "addr_en": "Sasang-gu, Busan, Baegyang-daero 880", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 880", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 880", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "학장삼성2차아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 학감대로123번길 75  (학장동, 학장동2차삼성아파트)", "addr_en": "Sasang-gu, Busan, Haggam-daero 123beon-gil 75 (Hakjang-dong, Hakjang-dong2차삼성아파트)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 123beon-gil 75 (Phường Hakjang, Phường Hakjang2차삼성아파트)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero 123beon-gil ko‘chasi 75 (Hakjang-dong, Hakjang-dong2차삼성아파트)", "dong": "학장동, 학장동", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "신주례LG1차아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 백양대로342번길 16 (주례동) 엘지신주례아파트", "addr_en": "Sasang-gu, Busan, Baegyang-daero 342beon-gil 16 (Jurye-dong) 엘지신주례아파트", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 342beon-gil 16 (Phường Jurye) 엘지신주례아파트", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero 342beon-gil ko‘chasi 16 (Jurye-dong) 엘지신주례아파트", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "2 대", "cnt_en": "2 units", "cnt_vi": "2 máy AED", "cnt_uz": "2 ta AED"}, {"name": "감전LH아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 백양대로 539 (감전동, 감전 엘에이치아파트)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 539 (Gamjeon-dong, 감전 엘에이치아파트)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 539 (Phường Gamjeon, 감전 엘에이치아파트)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 539 (Gamjeon-dong, 감전 엘에이치아파트)", "dong": "감전동", "dong_en": "Gamjeon-dong", "dong_vi": "Phường Gamjeon", "dong_uz": "Gamjeon-dong", "cnt_kr": "2 대", "cnt_en": "2 units", "cnt_vi": "2 máy AED", "cnt_uz": "2 ta AED"}, {"name": "모라주공3단지아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 모라로192번길 20-21 (모라동, 주공아파트3단지)", "addr_en": "Sasang-gu, Busan, Mora-ro 192beon-gil 20-21 (Mora-dong, 주공아파트3단지)", "addr_vi": "Quận Sasang, TP. Busan, Đường Mora-ro 192beon-gil 20-21 (Phường Mora, 주공아파트3단지)", "addr_uz": "Sasang tumani, Busan shahri, Mora-ro 192beon-gil ko‘chasi 20-21 (Mora-dong, 주공아파트3단지)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "5 대", "cnt_en": "5 units", "cnt_vi": "5 máy AED", "cnt_uz": "5 ta AED"}, {"name": "부산모라1LH아파트", "cat_raw": "공동주택(500이상)", "addr_kr": "부산광역시 사상구 모라로110번길 121", "addr_en": "Sasang-gu, Busan, Mora-ro 110beon-gil 121", "addr_vi": "Quận Sasang, TP. Busan, Đường Mora-ro 110beon-gil 121", "addr_uz": "Sasang tumani, Busan shahri, Mora-ro 110beon-gil ko‘chasi 121", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "6 대", "cnt_en": "6 units", "cnt_vi": "6 máy AED", "cnt_uz": "6 ta AED"}, {"name": "삼락생태공원오토캠핑장", "cat_raw": "공원", "addr_kr": "부산광역시 사상구 낙동대로 1231, 강변공원관리사무소 (삼락동)", "addr_en": "Sasang-gu, Busan, Nakdong-daero 1231, 강변공원관리사무소 (Samnak-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Nakdong-daero 1231, 강변공원관리사무소 (Phường Samnak)", "addr_uz": "Sasang tumani, Busan shahri, Nakdong-daero ko‘chasi 1231, 강변공원관리사무소 (Samnak-dong)", "dong": "삼락동", "dong_en": "Samnak-dong", "dong_vi": "Phường Samnak", "dong_uz": "Samnak-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "삼락생태공원", "cat_raw": "공원", "addr_kr": "부산광역시 사상구 낙동대로 1231, 강변공원관리사무소 (삼락동)", "addr_en": "Sasang-gu, Busan, Nakdong-daero 1231, 강변공원관리사무소 (Samnak-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Nakdong-daero 1231, 강변공원관리사무소 (Phường Samnak)", "addr_uz": "Sasang tumani, Busan shahri, Nakdong-daero ko‘chasi 1231, 강변공원관리사무소 (Samnak-dong)", "dong": "삼락동", "dong_en": "Samnak-dong", "dong_vi": "Phường Samnak", "dong_uz": "Samnak-dong", "cnt_kr": "4 대", "cnt_en": "4 units", "cnt_vi": "4 máy AED", "cnt_uz": "4 ta AED"}, {"name": "부산구치소", "cat_raw": "교도소, 소년교도소, 구치소, 외국인보호소, 소년원", "addr_kr": "부산광역시 사상구 학장로 268 (주례동)", "addr_en": "Sasang-gu, Busan, Hakjang-ro 268 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Hakjang-ro 268 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Hakjang-ro ko‘chasi 268 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "부산구치소", "cat_raw": "교도소, 소년교도소, 구치소, 외국인보호소, 소년원", "addr_kr": "부산광역시 사상구 학장로 268 (주례동)", "addr_en": "Sasang-gu, Busan, Hakjang-ro 268 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Hakjang-ro 268 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Hakjang-ro ko‘chasi 268 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "6 대", "cnt_en": "6 units", "cnt_vi": "6 máy AED", "cnt_uz": "6 ta AED"}, {"name": "부산사상우체국", "cat_raw": "구비의무기관 외 국가 또는 지방자치단체 청사", "addr_kr": "부산광역시 사상구 낙동대로1318번길 47, (주)롯데칠성음료 (삼락동)", "addr_en": "Sasang-gu, Busan, Nakdong-daero 1318beon-gil 47, (주)롯데칠성음료 (Samnak-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Nakdong-daero 1318beon-gil 47, (주)롯데칠성음료 (Phường Samnak)", "addr_uz": "Sasang tumani, Busan shahri, Nakdong-daero 1318beon-gil ko‘chasi 47, (주)롯데칠성음료 (Samnak-dong)", "dong": "삼락동", "dong_en": "Samnak-dong", "dong_vi": "Phường Samnak", "dong_uz": "Samnak-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "학장동행정복지센터", "cat_raw": "구비의무기관 외 국가 또는 지방자치단체 청사", "addr_kr": "부산광역시 사상구 학감대로147번길 11, 학장동 주민센터 (학장동)", "addr_en": "Sasang-gu, Busan, Haggam-daero 147beon-gil 11, Hakjang-dong 주민센터 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 147beon-gil 11, Phường Hakjang 주민센터 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero 147beon-gil ko‘chasi 11, Hakjang-dong 주민센터 (Hakjang-dong)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "주례2동행정복지센터", "cat_raw": "구비의무기관 외 국가 또는 지방자치단체 청사", "addr_kr": "부산광역시 사상구 주례로10번길 15", "addr_en": "Sasang-gu, Busan, Jurye-ro 10beon-gil 15", "addr_vi": "Quận Sasang, TP. Busan, Đường Jurye-ro 10beon-gil 15", "addr_uz": "Sasang tumani, Busan shahri, Jurye-ro 10beon-gil ko‘chasi 15", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "주례1동행정복지센터", "cat_raw": "구비의무기관 외 국가 또는 지방자치단체 청사", "addr_kr": "부산광역시 사상구 가야대로255번길 17, 주례1동 행정복지센터 (주례동)", "addr_en": "Sasang-gu, Busan, Gaya-daero 255beon-gil 17, 주례1동 행정복지센터 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gaya-daero 255beon-gil 17, 주례1동 행정복지센터 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Gaya-daero 255beon-gil ko‘chasi 17, 주례1동 행정복지센터 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "모라3동행정복지센터", "cat_raw": "구비의무기관 외 국가 또는 지방자치단체 청사", "addr_kr": "부산광역시 사상구 모라로110번길 99 (모라동)", "addr_en": "Sasang-gu, Busan, Mora-ro 110beon-gil 99 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Mora-ro 110beon-gil 99 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Mora-ro 110beon-gil ko‘chasi 99 (Mora-dong)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "엄궁동행정복지센터", "cat_raw": "구비의무기관 외 국가 또는 지방자치단체 청사", "addr_kr": "부산광역시 사상구 엄궁북로 15", "addr_en": "Sasang-gu, Busan, Eomgungbuk-ro 15", "addr_vi": "Quận Sasang, TP. Busan, Đường Eomgungbuk-ro 15", "addr_uz": "Sasang tumani, Busan shahri, Eomgungbuk-ro ko‘chasi 15", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "괘법동행정복지센터", "cat_raw": "구비의무기관 외 국가 또는 지방자치단체 청사", "addr_kr": "부산광역시 사상구 광장로97번길 6  (괘법동)", "addr_en": "Sasang-gu, Busan, Gwangjang-ro 97beon-gil 6 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gwangjang-ro 97beon-gil 6 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Gwangjang-ro 97beon-gil ko‘chasi 6 (Gwaebeop-dong)", "dong": "괘법동", "dong_en": "Gwaebeop-dong", "dong_vi": "Phường Gwaebeop", "dong_uz": "Gwaebeop-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "감전동행정복지센터", "cat_raw": "구비의무기관 외 국가 또는 지방자치단체 청사", "addr_kr": "부산광역시 사상구 새벽시장로56번길 20  (감전동)", "addr_en": "Sasang-gu, Busan, Saebyeoksijang-ro 56beon-gil 20 (Gamjeon-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Saebyeoksijang-ro 56beon-gil 20 (Phường Gamjeon)", "addr_uz": "Sasang tumani, Busan shahri, Saebyeoksijang-ro 56beon-gil ko‘chasi 20 (Gamjeon-dong)", "dong": "감전동", "dong_en": "Gamjeon-dong", "dong_vi": "Phường Gamjeon", "dong_uz": "Gamjeon-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "덕포2동행정복지센터", "cat_raw": "구비의무기관 외 국가 또는 지방자치단체 청사", "addr_kr": "부산광역시 사상구 사상로333번길 17  (덕포동)", "addr_en": "Sasang-gu, Busan, Sasang-ro 333beon-gil 17 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro 333beon-gil 17 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro 333beon-gil ko‘chasi 17 (Deokpo-dong)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "덕포1동행정복지센터", "cat_raw": "구비의무기관 외 국가 또는 지방자치단체 청사", "addr_kr": "부산광역시 사상구 사상로292번길 12  (덕포동)", "addr_en": "Sasang-gu, Busan, Sasang-ro 292beon-gil 12 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro 292beon-gil 12 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro 292beon-gil ko‘chasi 12 (Deokpo-dong)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "모라1동행정복지센터", "cat_raw": "구비의무기관 외 국가 또는 지방자치단체 청사", "addr_kr": "부산광역시 사상구 모라로 93  (모라동)", "addr_en": "Sasang-gu, Busan, Mora-ro 93 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Mora-ro 93 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Mora-ro ko‘chasi 93 (Mora-dong)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "주례3동행정복지센터", "cat_raw": "구비의무기관 외 국가 또는 지방자치단체 청사", "addr_kr": "부산광역시 사상구 냉정로 10, 주례3동주민센터 (주례동)", "addr_en": "Sasang-gu, Busan, Naengjeong-ro 10, 주례3동주민센터 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Naengjeong-ro 10, 주례3동주민센터 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Naengjeong-ro ko‘chasi 10, 주례3동주민센터 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "삼락동행정복지센터", "cat_raw": "구비의무기관 외 국가 또는 지방자치단체 청사", "addr_kr": "부산광역시 사상구 삼락천로 77, 삼락동 행정복지센터 1층 (삼락동)", "addr_en": "Sasang-gu, Busan, Samnakcheon-ro 77, Samnak-dong 행정복지센터 1층 (Samnak-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Samnakcheon-ro 77, Phường Samnak 행정복지센터 1층 (Phường Samnak)", "addr_uz": "Sasang tumani, Busan shahri, Samnakcheon-ro ko‘chasi 77, Samnak-dong 행정복지센터 1층 (Samnak-dong)", "dong": "삼락동", "dong_en": "Samnak-dong", "dong_vi": "Phường Samnak", "dong_uz": "Samnak-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상구 자원순환센터", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 낙동대로943번길 185, 사상구자원순환센터 (엄궁동)", "addr_en": "Sasang-gu, Busan, Nakdong-daero 943beon-gil 185, 사상구자원순환센터 (Eomgung-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Nakdong-daero 943beon-gil 185, 사상구자원순환센터 (Phường Eomgung)", "addr_uz": "Sasang tumani, Busan shahri, Nakdong-daero 943beon-gil ko‘chasi 185, 사상구자원순환센터 (Eomgung-dong)", "dong": "엄궁동", "dong_en": "Eomgung-dong", "dong_vi": "Phường Eomgung", "dong_uz": "Eomgung-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "GS편의점 사상경동점", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 백양대로 526 (주례동, 경동 리인)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 526 (Jurye-dong, 경동 리인)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 526 (Phường Jurye, 경동 리인)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 526 (Jurye-dong, 경동 리인)", "dong": "주례동, 경동", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "덕포시장 고객쉼터", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 사상로293번길 15, 덕포시장고객쉼터 (덕포동)", "addr_en": "Sasang-gu, Busan, Sasang-ro 293beon-gil 15, 덕포시장고객쉼터 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro 293beon-gil 15, 덕포시장고객쉼터 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro 293beon-gil ko‘chasi 15, 덕포시장고객쉼터 (Deokpo-dong)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "주례열린도서관", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 주례로 110 (주례동)", "addr_en": "Sasang-gu, Busan, Jurye-ro 110 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Jurye-ro 110 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Jurye-ro ko‘chasi 110 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "학마을목욕탕", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 학감대로 52, 학마을목욕탕 (학장동)", "addr_en": "Sasang-gu, Busan, Haggam-daero 52, 학마을목욕탕 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 52, 학마을목욕탕 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero ko‘chasi 52, 학마을목욕탕 (Hakjang-dong)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "GS25 편의점 모라우성점", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 백양대로 906, 124호 (모라동, 우성아파트)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 906, 124호 (Mora-dong, 우성아파트)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 906, 124호 (Phường Mora, 우성아파트)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 906, 124호 (Mora-dong, 우성아파트)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상구노인복지회관", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 가야대로196번길 51, 사상구 다누림센터 (학장동)", "addr_en": "Sasang-gu, Busan, Gaya-daero 196beon-gil 51, 사상구 다누림센터 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gaya-daero 196beon-gil 51, 사상구 다누림센터 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Gaya-daero 196beon-gil ko‘chasi 51, 사상구 다누림센터 (Hakjang-dong)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "대한노인회사상구지회", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 사상로319번길 6 (덕포동)", "addr_en": "Sasang-gu, Busan, Sasang-ro 319beon-gil 6 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro 319beon-gil 6 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro 319beon-gil ko‘chasi 6 (Deokpo-dong)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상구육아종합지원센터", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 낙동대로1210번길 17, 사상구 육아종합지원센터 (괘법동)", "addr_en": "Sasang-gu, Busan, Nakdong-daero 1210beon-gil 17, 사상구 육아종합지원센터 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Nakdong-daero 1210beon-gil 17, 사상구 육아종합지원센터 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Nakdong-daero 1210beon-gil ko‘chasi 17, 사상구 육아종합지원센터 (Gwaebeop-dong)", "dong": "괘법동", "dong_en": "Gwaebeop-dong", "dong_vi": "Phường Gwaebeop", "dong_uz": "Gwaebeop-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "으뜸유치원", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 학감대로49번길 28-7 (학장동)", "addr_en": "Sasang-gu, Busan, Haggam-daero 49beon-gil 28-7 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 49beon-gil 28-7 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero 49beon-gil ko‘chasi 28-7 (Hakjang-dong)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "GS25 구덕대림행운점", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 학감대로49번길 56, 학장대림아파트 3층 (학장동)", "addr_en": "Sasang-gu, Busan, Haggam-daero 49beon-gil 56, 학장대림아파트 3층 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 49beon-gil 56, 학장대림아파트 3층 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero 49beon-gil ko‘chasi 56, 학장대림아파트 3층 (Hakjang-dong)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상구장애인근로작업장", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 모라로192번길 2 (모라동)", "addr_en": "Sasang-gu, Busan, Mora-ro 192beon-gil 2 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Mora-ro 192beon-gil 2 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Mora-ro 192beon-gil ko‘chasi 2 (Mora-dong)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "삼락생태공원수상레포츠시설", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 낙동대로 1231, 강변공원관리사무소 (삼락동)", "addr_en": "Sasang-gu, Busan, Nakdong-daero 1231, 강변공원관리사무소 (Samnak-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Nakdong-daero 1231, 강변공원관리사무소 (Phường Samnak)", "addr_uz": "Sasang tumani, Busan shahri, Nakdong-daero ko‘chasi 1231, 강변공원관리사무소 (Samnak-dong)", "dong": "삼락동", "dong_en": "Samnak-dong", "dong_vi": "Phường Samnak", "dong_uz": "Samnak-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "한국전력공사북부산지사", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 백양대로700번길 24 (덕포동)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 700beon-gil 24 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 700beon-gil 24 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero 700beon-gil ko‘chasi 24 (Deokpo-dong)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "부산광역시남자단기청소년쉼터", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 모덕로 82, 부산광역시청소년종합지원센터 2층 211호 (덕포동)", "addr_en": "Sasang-gu, Busan, Modeok-ro 82, 부산광역시청소년종합지원센터 2층 211호 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Modeok-ro 82, 부산광역시청소년종합지원센터 2층 211호 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Modeok-ro ko‘chasi 82, 부산광역시청소년종합지원센터 2층 211호 (Deokpo-dong)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "GS학장호연점", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 학감대로123번길 67(학장동, 학장동삼정그린코아아파트)", "addr_en": "Sasang-gu, Busan, Haggam-daero 123beon-gil 67(Hakjang-dong, Hakjang-dong삼정그린코아아파트)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 123beon-gil 67(Phường Hakjang, Phường Hakjang삼정그린코아아파트)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero 123beon-gil ko‘chasi 67(Hakjang-dong, Hakjang-dong삼정그린코아아파트)", "dong": "학장동, 학장동", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "모덕유치원", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 덕상로 85, 자유아파트(모덕유치원) (덕포동)", "addr_en": "Sasang-gu, Busan, Deoksang-ro 85, 자유아파트(모덕유치원) (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Deoksang-ro 85, 자유아파트(모덕유치원) (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Deoksang-ro ko‘chasi 85, 자유아파트(모덕유치원) (Deokpo-dong)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상근린공원", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 백양대로 570(감전동)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 570(Gamjeon-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 570(Phường Gamjeon)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 570(Gamjeon-dong)", "dong": "감전동", "dong_en": "Gamjeon-dong", "dong_vi": "Phường Gamjeon", "dong_uz": "Gamjeon-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "삼락생태공원", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 낙동대로 1231, 강변공원관리사무소 (삼락동)", "addr_en": "Sasang-gu, Busan, Nakdong-daero 1231, 강변공원관리사무소 (Samnak-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Nakdong-daero 1231, 강변공원관리사무소 (Phường Samnak)", "addr_uz": "Sasang tumani, Busan shahri, Nakdong-daero ko‘chasi 1231, 강변공원관리사무소 (Samnak-dong)", "dong": "삼락동", "dong_en": "Samnak-dong", "dong_vi": "Phường Samnak", "dong_uz": "Samnak-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상구국제화센터", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 덕상로72번길 27, 국제화센터 (덕포동)", "addr_en": "Sasang-gu, Busan, Deoksang-ro 72beon-gil 27, 국제화센터 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Deoksang-ro 72beon-gil 27, 국제화센터 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Deoksang-ro 72beon-gil ko‘chasi 27, 국제화센터 (Deokpo-dong)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상구국제화센터", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 덕상로72번길 27, 국제화센터 (덕포동)", "addr_en": "Sasang-gu, Busan, Deoksang-ro 72beon-gil 27, 국제화센터 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Deoksang-ro 72beon-gil 27, 국제화센터 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Deoksang-ro 72beon-gil ko‘chasi 27, 국제화센터 (Deokpo-dong)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상생활사박물관", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 낙동대로1258번길 36 (삼락동)", "addr_en": "Sasang-gu, Busan, Nakdong-daero 1258beon-gil 36 (Samnak-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Nakdong-daero 1258beon-gil 36 (Phường Samnak)", "addr_uz": "Sasang tumani, Busan shahri, Nakdong-daero 1258beon-gil ko‘chasi 36 (Samnak-dong)", "dong": "삼락동", "dong_en": "Samnak-dong", "dong_vi": "Phường Samnak", "dong_uz": "Samnak-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상도서관", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 덕상로72번길 9 (덕포동)", "addr_en": "Sasang-gu, Busan, Deoksang-ro 72beon-gil 9 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Deoksang-ro 72beon-gil 9 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Deoksang-ro 72beon-gil ko‘chasi 9 (Deokpo-dong)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상아기성장터", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 백양대로 952, 모라1동 주민센터 (모라동)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 952, 모라1동 주민센터 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 952, 모라1동 주민센터 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 952, 모라1동 주민센터 (Mora-dong)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "치매안심센터", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 학감대로 242, 사상구청 (감전동)", "addr_en": "Sasang-gu, Busan, Haggam-daero 242, 사상구청 (Gamjeon-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 242, 사상구청 (Phường Gamjeon)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero ko‘chasi 242, 사상구청 (Gamjeon-dong)", "dong": "감전동", "dong_en": "Gamjeon-dong", "dong_vi": "Phường Gamjeon", "dong_uz": "Gamjeon-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상구청소년수련관", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 덕상로 129, 사상구청소년수련관 (모라동)", "addr_en": "Sasang-gu, Busan, Deoksang-ro 129, 사상구청소년수련관 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Deoksang-ro 129, 사상구청소년수련관 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Deoksang-ro ko‘chasi 129, 사상구청소년수련관 (Mora-dong)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "2 대", "cnt_en": "2 units", "cnt_vi": "2 máy AED", "cnt_uz": "2 ta AED"}, {"name": "부산도서관", "cat_raw": "기타", "addr_kr": "부산광역시 사상구 사상로310번길 33, 부산도서관 (덕포동)", "addr_en": "Sasang-gu, Busan, Sasang-ro 310beon-gil 33, 부산도서관 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro 310beon-gil 33, 부산도서관 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro 310beon-gil ko‘chasi 33, 부산도서관 (Deokpo-dong)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "2 대", "cnt_en": "2 units", "cnt_vi": "2 máy AED", "cnt_uz": "2 ta AED"}, {"name": "사상구청", "cat_raw": "보건관리자를 두어야 하는 300인이상 사업장", "addr_kr": "부산광역시 사상구 학감대로 242, 사상구청 (감전동)", "addr_en": "Sasang-gu, Busan, Haggam-daero 242, 사상구청 (Gamjeon-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 242, 사상구청 (Phường Gamjeon)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero ko‘chasi 242, 사상구청 (Gamjeon-dong)", "dong": "감전동", "dong_en": "Gamjeon-dong", "dong_vi": "Phường Gamjeon", "dong_uz": "Gamjeon-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "동서대학교", "cat_raw": "보건관리자를 두어야 하는 300인이상 사업장", "addr_kr": "부산광역시 사상구 주례로 47, 동서대학교 (주례동)", "addr_en": "Sasang-gu, Busan, Jurye-ro 47, 동서대학교 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Jurye-ro 47, 동서대학교 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Jurye-ro ko‘chasi 47, 동서대학교 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "경남정보대학교", "cat_raw": "보건관리자를 두어야 하는 300인이상 사업장", "addr_kr": "부산광역시 사상구 주례로 45, 경남정보대학교 (주례동)", "addr_en": "Sasang-gu, Busan, Jurye-ro 45, 경남정보대학교 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Jurye-ro 45, 경남정보대학교 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Jurye-ro ko‘chasi 45, 경남정보대학교 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "주식회사금양", "cat_raw": "보건관리자를 두어야 하는 300인이상 사업장", "addr_kr": "부산광역시 사상구 낙동대로960번길 77 (감전동)", "addr_en": "Sasang-gu, Busan, Nakdong-daero 960beon-gil 77 (Gamjeon-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Nakdong-daero 960beon-gil 77 (Phường Gamjeon)", "addr_uz": "Sasang tumani, Busan shahri, Nakdong-daero 960beon-gil ko‘chasi 77 (Gamjeon-dong)", "dong": "감전동", "dong_en": "Gamjeon-dong", "dong_vi": "Phường Gamjeon", "dong_uz": "Gamjeon-dong", "cnt_kr": "2 대", "cnt_en": "2 units", "cnt_vi": "2 máy AED", "cnt_uz": "2 ta AED"}, {"name": "포스코이앤씨, 엄궁3구역 주택재개발 정비사업", "cat_raw": "보건관리자를 두어야 하는 300인이상 사업장", "addr_kr": "부산광역시 사상구 엄궁로 179 (엄궁동)", "addr_en": "Sasang-gu, Busan, Eomgung-ro 179 (Eomgung-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Eomgung-ro 179 (Phường Eomgung)", "addr_uz": "Sasang tumani, Busan shahri, Eomgung-ro ko‘chasi 179 (Eomgung-dong)", "dong": "엄궁동", "dong_en": "Eomgung-dong", "dong_vi": "Phường Eomgung", "dong_uz": "Eomgung-dong", "cnt_kr": "2 대", "cnt_en": "2 units", "cnt_vi": "2 máy AED", "cnt_uz": "2 ta AED"}, {"name": "(의)은성의료재단좋은삼선병원", "cat_raw": "보건관리자를 두어야 하는 300인이상 사업장", "addr_kr": "부산광역시 사상구 가야대로 326 (주례동)", "addr_en": "Sasang-gu, Busan, Gaya-daero 326 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gaya-daero 326 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Gaya-daero ko‘chasi 326 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "2 대", "cnt_en": "2 units", "cnt_vi": "2 máy AED", "cnt_uz": "2 ta AED"}, {"name": "경남정보대학교", "cat_raw": "보건관리자를 두어야 하는 300인이상 사업장", "addr_kr": "부산광역시 사상구 주례로 45, 경남정보대학교 (주례동)", "addr_en": "Sasang-gu, Busan, Jurye-ro 45, 경남정보대학교 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Jurye-ro 45, 경남정보대학교 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Jurye-ro ko‘chasi 45, 경남정보대학교 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "2 대", "cnt_en": "2 units", "cnt_vi": "2 máy AED", "cnt_uz": "2 ta AED"}, {"name": "의료법인영재의료재단 큰솔병원", "cat_raw": "보건관리자를 두어야 하는 300인이상 사업장", "addr_kr": "부산광역시 사상구 대동로 141, 학장 큰솔병원 (학장동)", "addr_en": "Sasang-gu, Busan, Daedong-ro 141, 학장 큰솔병원 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Daedong-ro 141, 학장 큰솔병원 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Daedong-ro ko‘chasi 141, 학장 큰솔병원 (Hakjang-dong)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "3 대", "cnt_en": "3 units", "cnt_vi": "3 máy AED", "cnt_uz": "3 ta AED"}, {"name": "농심부산공장", "cat_raw": "보건관리자를 두어야 하는 300인이상 사업장", "addr_kr": "부산광역시 사상구 사상로455번길 46, 농심(주) (모라동)", "addr_en": "Sasang-gu, Busan, Sasang-ro 455beon-gil 46, 농심(주) (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro 455beon-gil 46, 농심(주) (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro 455beon-gil ko‘chasi 46, 농심(주) (Mora-dong)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "5 대", "cnt_en": "5 units", "cnt_vi": "5 máy AED", "cnt_uz": "5 ta AED"}, {"name": "신라대학교", "cat_raw": "보건관리자를 두어야 하는 300인이상 사업장", "addr_kr": "부산광역시 사상구 백양대로700번길 140, 신라대학교 (괘법동)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 700beon-gil 140, 신라대학교 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 700beon-gil 140, 신라대학교 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero 700beon-gil ko‘chasi 140, 신라대학교 (Gwaebeop-dong)", "dong": "괘법동", "dong_en": "Gwaebeop-dong", "dong_vi": "Phường Gwaebeop", "dong_uz": "Gwaebeop-dong", "cnt_kr": "6 대", "cnt_en": "6 units", "cnt_vi": "6 máy AED", "cnt_uz": "6 ta AED"}, {"name": "부산산업용재유통상가협동조합", "cat_raw": "사무실", "addr_kr": "부산광역시 사상구 새벽로 131, 부산산업용재유통상가 (감전동)", "addr_en": "Sasang-gu, Busan, Saebyeok-ro 131, 부산산업용재유통상가 (Gamjeon-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Saebyeok-ro 131, 부산산업용재유통상가 (Phường Gamjeon)", "addr_uz": "Sasang tumani, Busan shahri, Saebyeok-ro ko‘chasi 131, 부산산업용재유통상가 (Gamjeon-dong)", "dong": "감전동", "dong_en": "Gamjeon-dong", "dong_vi": "Phường Gamjeon", "dong_uz": "Gamjeon-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "학장종합사회복지관", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 학감대로49번길 28-70, 학장사회복지관 별관 1층 (학장동)", "addr_en": "Sasang-gu, Busan, Haggam-daero 49beon-gil 28-70, 학장사회복지관 별관 1층 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 49beon-gil 28-70, 학장사회복지관 별관 1층 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero 49beon-gil ko‘chasi 28-70, 학장사회복지관 별관 1층 (Hakjang-dong)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "곡상골경로당", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 백양대로979번라길 28, 곡상골경로당 (모라동)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 979beonra-gil 28, 곡상골경로당 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 979beonra-gil 28, 곡상골경로당 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero 979beonra-gil ko‘chasi 28, 곡상골경로당 (Mora-dong)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "감전중앙경로당", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 새벽로168번길 51-14, 감전동 중앙경로당 (감전동)", "addr_en": "Sasang-gu, Busan, Saebyeok-ro 168beon-gil 51-14, Gamjeon-dong 중앙경로당 (Gamjeon-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Saebyeok-ro 168beon-gil 51-14, Phường Gamjeon 중앙경로당 (Phường Gamjeon)", "addr_uz": "Sasang tumani, Busan shahri, Saebyeok-ro 168beon-gil ko‘chasi 51-14, Gamjeon-dong 중앙경로당 (Gamjeon-dong)", "dong": "감전동", "dong_en": "Gamjeon-dong", "dong_vi": "Phường Gamjeon", "dong_uz": "Gamjeon-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "동주경로당", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 가야대로318번길 72-8 (주례동)", "addr_en": "Sasang-gu, Busan, Gaya-daero 318beon-gil 72-8 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gaya-daero 318beon-gil 72-8 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Gaya-daero 318beon-gil ko‘chasi 72-8 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상구장애인자립생활센터(별관1)", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 사상로 512 (모라동, 모라리버빌)", "addr_en": "Sasang-gu, Busan, Sasang-ro 512 (Mora-dong, 모라리버빌)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro 512 (Phường Mora, 모라리버빌)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi 512 (Mora-dong, 모라리버빌)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "모라1동마을건강센터", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 사상로 483, 모라1동 마을건강센터 (모라동)", "addr_en": "Sasang-gu, Busan, Sasang-ro 483, 모라1동 마을건강센터 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro 483, 모라1동 마을건강센터 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi 483, 모라1동 마을건강센터 (Mora-dong)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상지역자활센터", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 모라로110번길 47 (모라동)", "addr_en": "Sasang-gu, Busan, Mora-ro 110beon-gil 47 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Mora-ro 110beon-gil 47 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Mora-ro 110beon-gil ko‘chasi 47 (Mora-dong)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "냉정마을 어울림센터", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 진사로36번길 46 (주례동)", "addr_en": "Sasang-gu, Busan, Jinsa-ro 36beon-gil 46 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Jinsa-ro 36beon-gil 46 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Jinsa-ro 36beon-gil ko‘chasi 46 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "새밭마을 행복센터", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 대동로159번길 107 (학장동)", "addr_en": "Sasang-gu, Busan, Daedong-ro 159beon-gil 107 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Daedong-ro 159beon-gil 107 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Daedong-ro 159beon-gil ko‘chasi 107 (Hakjang-dong)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "모라종합사회복지관", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 모라로110번길 129, 모라종합사회복지관 (모라동)", "addr_en": "Sasang-gu, Busan, Mora-ro 110beon-gil 129, 모라종합사회복지관 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Mora-ro 110beon-gil 129, 모라종합사회복지관 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Mora-ro 110beon-gil ko‘chasi 129, 모라종합사회복지관 (Mora-dong)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상구장애인복지관", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 모라로192번길 21, 사상구장애인복지관 (모라동)", "addr_en": "Sasang-gu, Busan, Mora-ro 192beon-gil 21, 사상구장애인복지관 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Mora-ro 192beon-gil 21, 사상구장애인복지관 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Mora-ro 192beon-gil ko‘chasi 21, 사상구장애인복지관 (Mora-dong)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "부산광역시일시청소년쉼터(고정형)", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 모덕로 82, 부산광역시청소년종합지원센터 122호 (덕포동)", "addr_en": "Sasang-gu, Busan, Modeok-ro 82, 부산광역시청소년종합지원센터 122호 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Modeok-ro 82, 부산광역시청소년종합지원센터 122호 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Modeok-ro ko‘chasi 82, 부산광역시청소년종합지원센터 122호 (Deokpo-dong)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상구보건소다누림센타", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 가야대로196번길 51 (학장동)", "addr_en": "Sasang-gu, Busan, Gaya-daero 196beon-gil 51 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gaya-daero 196beon-gil 51 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Gaya-daero 196beon-gil ko‘chasi 51 (Hakjang-dong)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상평생학습관", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 새벽로168번길 61, 사상평생학습관 (감전동)", "addr_en": "Sasang-gu, Busan, Saebyeok-ro 168beon-gil 61, 사상평생학습관 (Gamjeon-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Saebyeok-ro 168beon-gil 61, 사상평생학습관 (Phường Gamjeon)", "addr_uz": "Sasang tumani, Busan shahri, Saebyeok-ro 168beon-gil ko‘chasi 61, 사상평생학습관 (Gamjeon-dong)", "dong": "감전동", "dong_en": "Gamjeon-dong", "dong_vi": "Phường Gamjeon", "dong_uz": "Gamjeon-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상구종합사회복지관", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 백양대로 527, 사상구종합사회복지관 (주례동)", "addr_en": "Sasang-gu, Busan, Baegyang-daero 527, 사상구종합사회복지관 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Baegyang-daero 527, 사상구종합사회복지관 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Baegyang-daero ko‘chasi 527, 사상구종합사회복지관 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "2 대", "cnt_en": "2 units", "cnt_vi": "2 máy AED", "cnt_uz": "2 ta AED"}, {"name": "사상구노인복지관분관", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 모라로 93, 모라1동 행정복지센터 4층 (모라동)", "addr_en": "Sasang-gu, Busan, Mora-ro 93, 모라1동 행정복지센터 4층 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Mora-ro 93, 모라1동 행정복지센터 4층 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Mora-ro ko‘chasi 93, 모라1동 행정복지센터 4층 (Mora-dong)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "2 대", "cnt_en": "2 units", "cnt_vi": "2 máy AED", "cnt_uz": "2 ta AED"}, {"name": "사상구보건소다누림센타", "cat_raw": "사회복지시설", "addr_kr": "부산광역시 사상구 가야대로196번길 51 (학장동)", "addr_en": "Sasang-gu, Busan, Gaya-daero 196beon-gil 51 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gaya-daero 196beon-gil 51 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Gaya-daero 196beon-gil ko‘chasi 51 (Hakjang-dong)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "4 대", "cnt_en": "4 units", "cnt_vi": "4 máy AED", "cnt_uz": "4 ta AED"}, {"name": "(주)롯데쇼핑 롯데마트 사상점", "cat_raw": "쇼핑몰", "addr_kr": "부산광역시 사상구 낙동대로 733, 롯데마트 사상점 (엄궁동)", "addr_en": "Sasang-gu, Busan, Nakdong-daero 733, 롯데마트 사상점 (Eomgung-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Nakdong-daero 733, 롯데마트 사상점 (Phường Eomgung)", "addr_uz": "Sasang tumani, Busan shahri, Nakdong-daero ko‘chasi 733, 롯데마트 사상점 (Eomgung-dong)", "dong": "엄궁동", "dong_en": "Eomgung-dong", "dong_vi": "Phường Eomgung", "dong_uz": "Eomgung-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "(주)이마트사상점", "cat_raw": "쇼핑몰", "addr_kr": "부산광역시 사상구 광장로 17  (괘법동)", "addr_en": "Sasang-gu, Busan, Gwangjang-ro 17 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gwangjang-ro 17 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Gwangjang-ro ko‘chasi 17 (Gwaebeop-dong)", "dong": "괘법동", "dong_en": "Gwaebeop-dong", "dong_vi": "Phường Gwaebeop", "dong_uz": "Gwaebeop-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "홈플러스(주)서부산점", "cat_raw": "쇼핑몰", "addr_kr": "부산광역시 사상구 광장로 7 홈플러스(주)서부산점", "addr_en": "Sasang-gu, Busan, Gwangjang-ro 7 홈플러스(주)서부산점", "addr_vi": "Quận Sasang, TP. Busan, Đường Gwangjang-ro 7 홈플러스(주)서부산점", "addr_uz": "Sasang tumani, Busan shahri, Gwangjang-ro ko‘chasi 7 홈플러스(주)서부산점", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "서부시외버스터미널", "cat_raw": "여객자동차터미널의 대합실", "addr_kr": "부산광역시 사상구 사상로 201 (괘법동)", "addr_en": "Sasang-gu, Busan, Sasang-ro 201 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro 201 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi 201 (Gwaebeop-dong)", "dong": "괘법동", "dong_en": "Gwaebeop-dong", "dong_vi": "Phường Gwaebeop", "dong_uz": "Gwaebeop-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "감로수요양병원", "cat_raw": "요양기관", "addr_kr": "부산광역시 사상구 덕상로 116-38  (모라동)", "addr_en": "Sasang-gu, Busan, Deoksang-ro 116-38 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Deoksang-ro 116-38 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Deoksang-ro ko‘chasi 116-38 (Mora-dong)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "의료법인 희경의료재단 한국요양병원", "cat_raw": "의료기관", "addr_kr": "부산광역시 사상구 광장로 33, 한국요양병원 (괘법동)", "addr_en": "Sasang-gu, Busan, Gwangjang-ro 33, 한국요양병원 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gwangjang-ro 33, 한국요양병원 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Gwangjang-ro ko‘chasi 33, 한국요양병원 (Gwaebeop-dong)", "dong": "괘법동", "dong_en": "Gwaebeop-dong", "dong_vi": "Phường Gwaebeop", "dong_uz": "Gwaebeop-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "(의)길정의료재단대남병원", "cat_raw": "의료기관", "addr_kr": "부산광역시 사상구 학감대로39번길 116 (학장동)", "addr_en": "Sasang-gu, Busan, Haggam-daero 39beon-gil 116 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 39beon-gil 116 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero 39beon-gil ko‘chasi 116 (Hakjang-dong)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "우리병원", "cat_raw": "의료기관", "addr_kr": "부산광역시 사상구 사상로 237 (괘법동)", "addr_en": "Sasang-gu, Busan, Sasang-ro 237 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro 237 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi 237 (Gwaebeop-dong)", "dong": "괘법동", "dong_en": "Gwaebeop-dong", "dong_vi": "Phường Gwaebeop", "dong_uz": "Gwaebeop-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상스마트병원", "cat_raw": "의료기관", "addr_kr": "부산광역시 사상구 학감대로 269 (감전동)", "addr_en": "Sasang-gu, Busan, Haggam-daero 269 (Gamjeon-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 269 (Phường Gamjeon)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero ko‘chasi 269 (Gamjeon-dong)", "dong": "감전동", "dong_en": "Gamjeon-dong", "dong_vi": "Phường Gamjeon", "dong_uz": "Gamjeon-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "의료법인길정의료재단길정병원", "cat_raw": "의료기관", "addr_kr": "부산광역시 사상구 학감대로39번길 116, 길정병원 (학장동)", "addr_en": "Sasang-gu, Busan, Haggam-daero 39beon-gil 116, 길정병원 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Haggam-daero 39beon-gil 116, 길정병원 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Haggam-daero 39beon-gil ko‘chasi 116, 길정병원 (Hakjang-dong)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "2 대", "cnt_en": "2 units", "cnt_vi": "2 máy AED", "cnt_uz": "2 ta AED"}, {"name": "의료법인영재의료재단큰솔2병원", "cat_raw": "의료기관", "addr_kr": "부산광역시 사상구 학장로 189 (학장동)", "addr_en": "Sasang-gu, Busan, Hakjang-ro 189 (Hakjang-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Hakjang-ro 189 (Phường Hakjang)", "addr_uz": "Sasang tumani, Busan shahri, Hakjang-ro ko‘chasi 189 (Hakjang-dong)", "dong": "학장동", "dong_en": "Hakjang-dong", "dong_vi": "Phường Hakjang", "dong_uz": "Hakjang-dong", "cnt_kr": "3 대", "cnt_en": "3 units", "cnt_vi": "3 máy AED", "cnt_uz": "3 ta AED"}, {"name": "(의)센텀의료재단서부산센텀병원", "cat_raw": "의료기관", "addr_kr": "부산광역시 사상구 새벽로 226 (괘법동)", "addr_en": "Sasang-gu, Busan, Saebyeok-ro 226 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Saebyeok-ro 226 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Saebyeok-ro ko‘chasi 226 (Gwaebeop-dong)", "dong": "괘법동", "dong_en": "Gwaebeop-dong", "dong_vi": "Phường Gwaebeop", "dong_uz": "Gwaebeop-dong", "cnt_kr": "3 대", "cnt_en": "3 units", "cnt_vi": "3 máy AED", "cnt_uz": "3 ta AED"}, {"name": "부산김해경전철르네시떼역", "cat_raw": "지하철역", "addr_kr": "부산광역시 사상구 광장로 9, 괘법르네시떼 정거장 (괘법동)", "addr_en": "Sasang-gu, Busan, Gwangjang-ro 9, 괘법르네시떼 정거장 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gwangjang-ro 9, 괘법르네시떼 정거장 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Gwangjang-ro ko‘chasi 9, 괘법르네시떼 정거장 (Gwaebeop-dong)", "dong": "괘법동", "dong_en": "Gwaebeop-dong", "dong_vi": "Phường Gwaebeop", "dong_uz": "Gwaebeop-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "냉정지하철역", "cat_raw": "지하철역", "addr_kr": "부산광역시 사상구 가야대로 지하362-1, 냉정역 (주례동)", "addr_en": "Sasang-gu, Busan, Gaya-daero B362-1, 냉정역 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gaya-daero Hầm 362-1, 냉정역 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Gaya-daero ko‘chasi Yerosti 362-1, 냉정역 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "모덕지하철역", "cat_raw": "지하철역", "addr_kr": "부산광역시 사상구 사상로 지하409, 모덕역 (덕포동)", "addr_en": "Sasang-gu, Busan, Sasang-ro B409, 모덕역 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro Hầm 409, 모덕역 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi Yerosti 409, 모덕역 (Deokpo-dong)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "감전지하철역", "cat_raw": "지하철역", "addr_kr": "부산광역시 사상구 사상로 지하93-1, 감전역 (감전동)", "addr_en": "Sasang-gu, Busan, Sasang-ro B93-1, 감전역 (Gamjeon-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro Hầm 93-1, 감전역 (Phường Gamjeon)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi Yerosti 93-1, 감전역 (Gamjeon-dong)", "dong": "감전동", "dong_en": "Gamjeon-dong", "dong_vi": "Phường Gamjeon", "dong_uz": "Gamjeon-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "부산김해경전철사상역", "cat_raw": "지하철역", "addr_kr": "부산광역시 사상구 광장로 83", "addr_en": "Sasang-gu, Busan, Gwangjang-ro 83", "addr_vi": "Quận Sasang, TP. Busan, Đường Gwangjang-ro 83", "addr_uz": "Sasang tumani, Busan shahri, Gwangjang-ro ko‘chasi 83", "dong": "사상구", "dong_en": "Sasang-gu", "dong_vi": "Quận Sasang", "dong_uz": "Sasang tumani", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "모라지하철역", "cat_raw": "지하철역", "addr_kr": "부산광역시 사상구 사상로 지하 498, 모라역 (모라동)", "addr_en": "Sasang-gu, Busan, Sasang-ro B498, 모라역 (Mora-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro Hầm 498, 모라역 (Phường Mora)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi Yerosti 498, 모라역 (Mora-dong)", "dong": "모라동", "dong_en": "Mora-dong", "dong_vi": "Phường Mora", "dong_uz": "Mora-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "덕포지하철역", "cat_raw": "지하철역", "addr_kr": "부산광역시 사상구 사상로 지하 320-1, 덕포역 (덕포동)", "addr_en": "Sasang-gu, Busan, Sasang-ro B320-1, 덕포역 (Deokpo-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro Hầm 320-1, 덕포역 (Phường Deokpo)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi Yerosti 320-1, 덕포역 (Deokpo-dong)", "dong": "덕포동", "dong_en": "Deokpo-dong", "dong_vi": "Phường Deokpo", "dong_uz": "Deokpo-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "사상지하철역", "cat_raw": "지하철역", "addr_kr": "부산광역시 사상구 사상로 지하 203, 사상역 (괘법동)", "addr_en": "Sasang-gu, Busan, Sasang-ro B203, 사상역 (Gwaebeop-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Sasang-ro Hầm 203, 사상역 (Phường Gwaebeop)", "addr_uz": "Sasang tumani, Busan shahri, Sasang-ro ko‘chasi Yerosti 203, 사상역 (Gwaebeop-dong)", "dong": "괘법동", "dong_en": "Gwaebeop-dong", "dong_vi": "Phường Gwaebeop", "dong_uz": "Gwaebeop-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "주례지하철역", "cat_raw": "지하철역", "addr_kr": "부산광역시 사상구 가야대로 지하 292, 주례역 (주례동)", "addr_en": "Sasang-gu, Busan, Gaya-daero B292, 주례역 (Jurye-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Gaya-daero Hầm 292, 주례역 (Phường Jurye)", "addr_uz": "Sasang tumani, Busan shahri, Gaya-daero ko‘chasi Yerosti 292, 주례역 (Jurye-dong)", "dong": "주례동", "dong_en": "Jurye-dong", "dong_vi": "Phường Jurye", "dong_uz": "Jurye-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}, {"name": "동궁초등학교행정실앞", "cat_raw": "학교", "addr_kr": "부산광역시 사상구 엄궁로 70-7 (엄궁동)", "addr_en": "Sasang-gu, Busan, Eomgung-ro 70-7 (Eomgung-dong)", "addr_vi": "Quận Sasang, TP. Busan, Đường Eomgung-ro 70-7 (Phường Eomgung)", "addr_uz": "Sasang tumani, Busan shahri, Eomgung-ro ko‘chasi 70-7 (Eomgung-dong)", "dong": "엄궁동", "dong_en": "Eomgung-dong", "dong_vi": "Phường Eomgung", "dong_uz": "Eomgung-dong", "cnt_kr": "1 대", "cnt_en": "1 unit", "cnt_vi": "1 máy AED", "cnt_uz": "1 ta AED"}];
+
+const CAT_COLORS = {
+  subway: '#0F8B4C',
+  admin:  '#1D63B8',
+  welfare:'#E06D1B',
+  living: '#D62828'
+};
+
+const DONG_OPTIONS = [
+  { key: 'ALL', kr: '전체 동', en: 'All Dongs', vi: 'Tất cả phường', uz: 'Barcha hududlar' },
+  { key: '괘법동', kr: '괘법동', en: 'Gwaebeop-dong', vi: 'Phường Gwaebeop', uz: 'Gwaebeop-dong' },
+  { key: '감전동', kr: '감전동', en: 'Gamjeon-dong', vi: 'Phường Gamjeon', uz: 'Gamjeon-dong' },
+  { key: '덕포동', kr: '덕포동', en: 'Deokpo-dong', vi: 'Phường Deokpo', uz: 'Deokpo-dong' },
+  { key: '모라동', kr: '모라동', en: 'Mora-dong', vi: 'Phường Mora', uz: 'Mora-dong' },
+  { key: '주례동', kr: '주례동', en: 'Jurye-dong', vi: 'Phường Jurye', uz: 'Jurye-dong' },
+  { key: '학장동', kr: '학장동', en: 'Hakjang-dong', vi: 'Phường Hakjang', uz: 'Hakjang-dong' },
+  { key: '엄궁동', kr: '엄궁동', en: 'Eomgung-dong', vi: 'Phường Eomgung', uz: 'Eomgung-dong' },
+  { key: '삼락동', kr: '삼락동', en: 'Samnak-dong', vi: 'Phường Samnak', uz: 'Samnak-dong' }
+];
+
+const UI_TEXT = {
+  kr: {
+    title: '언어를 넘는 119! 사상구 AED 안전지도',
+    subtitle: '사상구 주요 거점 자동심장충격기 위치 안내',
+    alert: '🚨 위급 상황 시 즉시 <strong>119</strong>에 전화하고, 아래 지도에서 가장 가까운 <strong>AED</strong>를 확인하세요.',
+    tabCore: '핵심 거점 24곳 (지도)',
+    tabAll: '관내 전체 시설 검색 (139곳)',
+    chipAll: '전체 (24)',
+    chipSubway: '지하철·경전철 (9)',
+    chipAdmin: '행정·문화 (4)',
+    chipWelfare: '복지·청소년 (6)',
+    chipLiving: '교통·마트·공원 (5)',
+    mapHint: '👆 번호 핀을 누르면 상세 위치와 길찾기가 열립니다',
+    naverBtn: '네이버 지도 길찾기',
+    googleBtn: 'Google Maps 길찾기',
+    searchPh: '기관명, 아파트, 복지관, 도로명 주소 검색...',
+    resultCount: (n) => `검색 결과: ${n}곳`,
+    cprTitle: '❤️ 심정지 환자 발견 시 3단계 행동요령',
+    cprSteps: [
+      '<strong>119 신고 및 AED 요청:</strong> 주변 사람에게 큰 소리로 119 신고와 AED를 가져다 달라고 요청합니다.',
+      '<strong>가슴압박 시작:</strong> 양손을 깍지 끼고 가슴 중앙을 강하고 빠르게(분당 100~120회, 약 5cm 깊이) 압박합니다.',
+      '<strong>AED 도착 즉시 사용:</strong> 전원을 켜고 패드를 부착한 뒤 음성 안내에 따라 심장충격을 시행합니다.'
+    ],
+    footer: '부산광역시 사상소방서 · 사상구 자동심장충격기(AED) 현황 자료 기반',
+    catLabel: { subway: '지하철·경전철역', admin: '행정·문화거점', welfare: '복지·청소년거점', living: '교통·마트·공원' },
+    svg: {
+      riverMain: '낙동강',
+      riverSub: 'Nakdong River',
+      samnak: '삼락생태공원',
+      baegyangsan: '백양산 방면',
+      roadNakdong: '낙동대로',
+      roadBaegyang: '백양대로',
+      line2: '도시철도 2호선',
+      lrt: '부산김해경전철'
+    }
+  },
+  en: {
+    title: '119 Beyond Language! Sasang AED Map',
+    subtitle: 'Key AED Locations in Sasang-gu, Busan',
+    alert: '🚨 In an emergency, call <strong>119</strong> immediately and find the nearest <strong>AED</strong> below.',
+    tabCore: '24 Key Hubs (Map)',
+    tabAll: 'Search All 139 Sites',
+    chipAll: 'All (24)',
+    chipSubway: 'Subway / LRT (9)',
+    chipAdmin: 'Admin / Culture (4)',
+    chipWelfare: 'Welfare / Youth (6)',
+    chipLiving: 'Transit / Mart / Park (5)',
+    mapHint: '👆 Tap any numbered pin for details & directions',
+    naverBtn: 'Naver Map Directions',
+    googleBtn: 'Google Maps',
+    searchPh: 'Search facility name or street address...',
+    resultCount: (n) => `Results: ${n} locations`,
+    cprTitle: '❤️ 3 Steps When Someone Collapses',
+    cprSteps: [
+      '<strong>Call 119 & Get AED:</strong> Shout for someone to call 119 and bring the nearest AED.',
+      '<strong>Start Chest Compressions:</strong> Push hard and fast in the center of the chest (100–120/min, ~5cm deep).',
+      '<strong>Use AED Immediately:</strong> Turn on the AED, attach pads as shown, and follow voice prompts.'
+    ],
+    footer: 'Busan Sasang Fire Station · Based on Sasang-gu AED Registry Data',
+    catLabel: { subway: 'Subway / LRT', admin: 'Admin & Culture', welfare: 'Welfare & Youth', living: 'Transit, Mart & Park' },
+    svg: {
+      riverMain: 'Nakdong River',
+      riverSub: 'West Axis',
+      samnak: 'Samnak Eco Park',
+      baegyangsan: 'Baegyangsan Mt.',
+      roadNakdong: 'Nakdong-daero',
+      roadBaegyang: 'Baegyang-daero',
+      line2: 'Metro Line 2',
+      lrt: 'Gimhae LRT'
+    }
+  },
+  vi: {
+    title: '119 Vượt Rào Ngôn Ngữ! Bản Đồ AED Sasang',
+    subtitle: 'Vị trí máy khử rung tim (AED) trọng điểm tại quận Sasang',
+    alert: '🚨 Khi khẩn cấp, hãy gọi <strong>119</strong> ngay và tìm máy <strong>AED</strong> gần nhất bên dưới.',
+    tabCore: '24 Điểm Chính (Bản đồ)',
+    tabAll: 'Tìm Toàn Bộ 139 Điểm',
+    chipAll: 'Tất cả (24)',
+    chipSubway: 'Tàu điện (9)',
+    chipAdmin: 'Hành chính (4)',
+    chipWelfare: 'Phúc lợi (6)',
+    chipLiving: 'Bến xe·Siêu thị·Công viên (5)',
+    mapHint: '👆 Chạm vào số trên bản đồ để xem chi tiết & chỉ đường',
+    naverBtn: 'Chỉ đường Naver Map',
+    googleBtn: 'Google Maps',
+    searchPh: 'Tìm tên cơ sở hoặc địa chỉ đường phố...',
+    resultCount: (n) => `Kết quả: ${n} địa điểm`,
+    cprTitle: '❤️ 3 Bước Sơ Cứu Khi Có Người Ngừng Tim',
+    cprSteps: [
+      '<strong>Gọi 119 & Lấy máy AED:</strong> Nhờ người xung quanh gọi 119 và mang máy AED gần nhất tới.',
+      '<strong>Ép tim ngoài lồng ngực:</strong> Đan hai tay ấn mạnh và nhanh giữa ngực (100–120 lần/phút, sâu ~5cm).',
+      '<strong>Dùng ngay máy AED:</strong> Bật nguồn, dán miếng điện cực và làm theo hướng dẫn giọng nói.'
+    ],
+    footer: 'Sở Cứu hỏa Sasang Busan · Dữ liệu danh mục AED quận Sasang',
+    catLabel: { subway: 'Ga tàu điện', admin: 'Hành chính & Văn hóa', welfare: 'Trung tâm Phúc lợi', living: 'Bến xe, Siêu thị & Công viên' },
+    svg: {
+      riverMain: 'Sông Nakdong',
+      riverSub: 'Nakdong River',
+      samnak: 'CV Sinh thái Samnak',
+      baegyangsan: 'Hướng Núi Baegyang',
+      roadNakdong: 'Đường Nakdong-daero',
+      roadBaegyang: 'Đường Baegyang-daero',
+      line2: 'Tàu điện Tuyến số 2',
+      lrt: 'Đường sắt nhẹ Busan-Gimhae'
+    }
+  },
+  uz: {
+    title: 'Til To‘sig‘idan O‘tuvchi 119! Sasang AED Xaritasi',
+    subtitle: 'Sasang tumanidagi asosiy AED joylashuvlari',
+    alert: '🚨 Favqulodda holatda darhol <strong>119</strong> ga qo‘ng‘iroq qiling va eng yaqin <strong>AED</strong> ni toping.',
+    tabCore: '24 Asosiy Nuqta (Xarita)',
+    tabAll: 'Barcha 139 Joyni Qidirish',
+    chipAll: 'Barchasi (24)',
+    chipSubway: 'Metro / LRT (9)',
+    chipAdmin: 'Ma’muriy / Madaniy (4)',
+    chipWelfare: 'Ijtimoiy / Yoshlar (6)',
+    chipLiving: 'Vokzal / Do‘kon / Bog‘ (5)',
+    mapHint: '👆 Batafsil ma’lumot va yo‘nalish uchun raqamni bosing',
+    naverBtn: 'Naver Map yo‘nalish',
+    googleBtn: 'Google Maps',
+    searchPh: 'Muassasa nomi yoki ko‘cha manzilini qidiring...',
+    resultCount: (n) => `Natija: ${n} ta joy`,
+    cprTitle: '❤️ Yurak To‘xtaganda 3 Muhim Qadam',
+    cprSteps: [
+      '<strong>119 ga qo‘ng‘iroq va AED:</strong> Atrofdagilardan 119 ga qo‘ng‘iroq qilish va AED olib kelishni so‘rang.',
+      '<strong>Ko‘krak qafasini bosish:</strong> Ko‘krak o‘rtasini tez va kuchli bosing (daqiqasiga 100–120 marta, ~5 sm).',
+      '<strong>AED ni darhol qo‘llang:</strong> Qurilmani yoqing, prokladkalarni yopishtiring va ovozli ko‘rsatmaga amal qiling.'
+    ],
+    footer: 'Busan Sasang O‘t o‘chirish bo‘limi · Sasang tumani AED ma’lumotlari asosida',
+    catLabel: { subway: 'Metro / LRT bekati', admin: 'Ma’muriy va madaniy', welfare: 'Ijtimoiy markaz', living: 'Vokzal, do‘kon va bog‘' },
+    svg: {
+      riverMain: 'Nakdong daryosi',
+      riverSub: 'Nakdong River',
+      samnak: 'Samnak ekobog‘i',
+      baegyangsan: 'Baegyangsan tog‘i',
+      roadNakdong: 'Nakdong-daero ko‘chasi',
+      roadBaegyang: 'Baegyang-daero ko‘chasi',
+      line2: '2-metro liniyasi',
+      lrt: 'Busan-Gimhae LRT'
+    }
+  }
+};
+
+let currentLang = 'kr';
+let currentCat = 'all';
+let selectedId = 1;
+let currentDong = 'ALL';
+let mapScale = 1.0;
+
+function svgY(y) { return 100 - y; }
+
+function getHubAddr(hub, lang) {
+  return hub['addr_' + lang] || hub.addr_kr;
+}
+function getHubCnt(hub, lang) {
+  return hub['cnt_' + lang] || hub.cnt_kr;
+}
+function getFacAddr(f, lang) {
+  return f['addr_' + lang] || f.addr_kr;
+}
+function getFacCnt(f, lang) {
+  return f['cnt_' + lang] || f.cnt_kr;
+}
+function getFacDong(f, lang) {
+  return lang === 'kr' ? f.dong : (f['dong_' + lang] || f.dong);
+}
+
+function renderDongFilter() {
+  const wrap = document.getElementById('dong-filter');
+  wrap.innerHTML = DONG_OPTIONS.map(d => {
+    const label = d[currentLang] || d.kr;
+    const activeClass = d.key === currentDong ? 'active' : '';
+    return `<button class="dong-btn ${activeClass}" data-dong="${d.key}">${label}</button>`;
+  }).join('');
+
+  wrap.querySelectorAll('.dong-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentDong = btn.dataset.dong;
+      renderDongFilter();
+      renderAllList();
+    });
+  });
+}
+
+function updateSvgLabels(t) {
+  document.getElementById('svg-river-main').textContent = t.svg.riverMain;
+  document.getElementById('svg-river-sub').textContent = t.svg.riverSub;
+  document.getElementById('svg-samnak').textContent = t.svg.samnak;
+  document.getElementById('svg-baegyangsan').textContent = t.svg.baegyangsan;
+  document.getElementById('svg-road-nakdong').textContent = t.svg.roadNakdong;
+  document.getElementById('svg-road-baegyang').textContent = t.svg.roadBaegyang;
+  document.getElementById('svg-line2').textContent = t.svg.line2;
+  document.getElementById('svg-lrt').textContent = t.svg.lrt;
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  const t = UI_TEXT[lang];
+  document.getElementById('ui-title').textContent = t.title;
+  document.getElementById('ui-subtitle').textContent = t.subtitle;
+  document.getElementById('ui-alert').innerHTML = t.alert;
+  document.getElementById('tab-core').textContent = t.tabCore;
+  document.getElementById('tab-all').textContent = t.tabAll;
+  document.getElementById('chip-all').textContent = t.chipAll;
+  document.getElementById('chip-subway').textContent = t.chipSubway;
+  document.getElementById('chip-admin').textContent = t.chipAdmin;
+  document.getElementById('chip-welfare').textContent = t.chipWelfare;
+  document.getElementById('chip-living').textContent = t.chipLiving;
+  document.getElementById('ui-map-hint').textContent = t.mapHint;
+  document.getElementById('search-input').placeholder = t.searchPh;
+  document.getElementById('ui-cpr-title').textContent = t.cprTitle;
+  document.getElementById('ui-cpr-steps').innerHTML = t.cprSteps.map(s => `<li>${s}</li>`).join('');
+  document.getElementById('ui-footer').textContent = t.footer;
+
+  updateSvgLabels(t);
+  renderDongFilter();
+  renderPins();
+  renderDetailCard();
+  renderCoreList();
+  renderAllList();
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+});
+
+document.querySelectorAll('#cat-chips .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('#cat-chips .chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    currentCat = chip.dataset.cat;
+    renderPins();
+    renderCoreList();
+  });
+});
+
+function switchMode(mode) {
+  document.getElementById('tab-core').classList.toggle('active', mode === 'core');
+  document.getElementById('tab-all').classList.toggle('active', mode === 'all');
+  document.getElementById('core-section').classList.toggle('hidden', mode !== 'core');
+  document.getElementById('all-section').classList.toggle('hidden', mode !== 'all');
+  if (mode === 'all') renderAllList();
+}
+
+function zoomMap(delta) {
+  mapScale = Math.min(2.2, Math.max(0.85, mapScale + delta));
+  document.getElementById('map-canvas').style.transform = `scale(${mapScale})`;
+}
+function resetZoom() {
+  mapScale = 1.0;
+  document.getElementById('map-canvas').style.transform = 'scale(1)';
+  document.getElementById('map-viewport').scrollTo({ left: 0, top: 0, behavior: 'smooth' });
+}
+
+function renderPins() {
+  const layer = document.getElementById('pins-layer');
+  layer.innerHTML = '';
+  const filtered = currentCat === 'all' ? CORE_HUBS : CORE_HUBS.filter(h => h.cat === currentCat);
+
+  filtered.forEach(hub => {
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', 'pin-group' + (hub.id === selectedId ? ' selected' : ''));
+    const cx = hub.x;
+    const cy = svgY(hub.y);
+    const col = CAT_COLORS[hub.cat];
+
+    const halo = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    halo.setAttribute('class', 'halo');
+    halo.setAttribute('cx', cx);
+    halo.setAttribute('cy', cy);
+    halo.setAttribute('r', '3.6');
+    halo.setAttribute('fill', col);
+
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', cx);
+    circle.setAttribute('cy', cy);
+    circle.setAttribute('r', hub.id === selectedId ? '2.5' : '2.0');
+    circle.setAttribute('fill', col);
+    circle.setAttribute('stroke', '#FFFFFF');
+    circle.setAttribute('stroke-width', '0.45');
+
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', cx);
+    text.setAttribute('y', cy + 0.65);
+    text.setAttribute('fill', '#FFFFFF');
+    text.setAttribute('font-size', '1.75');
+    text.setAttribute('font-weight', 'bold');
+    text.setAttribute('text-anchor', 'middle');
+    text.textContent = hub.id;
+
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    const mapLabel = hub['map_' + currentLang] || hub.map_kr;
+    label.setAttribute('x', cx + 2.5);
+    label.setAttribute('y', cy + 0.55);
+    label.setAttribute('fill', '#0F172A');
+    label.setAttribute('font-size', '1.5');
+    label.setAttribute('font-weight', 'bold');
+    label.textContent = mapLabel;
+
+    g.appendChild(halo);
+    g.appendChild(circle);
+    g.appendChild(text);
+    g.appendChild(label);
+
+    g.addEventListener('click', () => selectHub(hub.id, false));
+    layer.appendChild(g);
+  });
+}
+
+function selectHub(id, scrollToMap) {
+  selectedId = id;
+  renderPins();
+  renderDetailCard();
+  renderCoreList();
+  if (scrollToMap) {
+    document.getElementById('map-viewport').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+function renderDetailCard() {
+  const hub = CORE_HUBS.find(h => h.id === selectedId) || CORE_HUBS[0];
+  const t = UI_TEXT[currentLang];
+  const col = CAT_COLORS[hub.cat];
+  const primaryName = currentLang === 'kr' ? hub.kr : hub[currentLang];
+  const subName = currentLang === 'kr' ? hub.en : hub.kr;
+  const addrText = getHubAddr(hub, currentLang);
+  const cntText = getHubCnt(hub, currentLang);
+  const note = hub['note_' + currentLang] || hub.note_kr;
+  const query = encodeURIComponent(hub.addr_kr + ' ' + hub.kr.split('(')[0]);
+  const naverUrl = `https://map.naver.com/v5/search/${query}`;
+  const googleUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+
+  document.getElementById('detail-card').innerHTML = `
+    <span class="detail-badge" style="background:${col}">#${hub.id} · ${t.catLabel[hub.cat]}</span>
+    <h2 class="detail-title">${primaryName}</h2>
+    <div class="detail-sub">${subName}</div>
+    <div class="detail-meta">
+      <div>📍 ${addrText}</div>
+      <div>⚡ AED: <strong>${cntText}</strong> · ${note}</div>
+    </div>
+    <div class="nav-actions">
+      <a class="nav-btn nav-naver" href="${naverUrl}" target="_blank" rel="noopener">🗺️ ${t.naverBtn}</a>
+      <a class="nav-btn nav-google" href="${googleUrl}" target="_blank" rel="noopener">🌐 ${t.googleBtn}</a>
+    </div>
+  `;
+}
+
+function renderCoreList() {
+  const container = document.getElementById('core-list');
+  const filtered = currentCat === 'all' ? CORE_HUBS : CORE_HUBS.filter(h => h.cat === currentCat);
+  container.innerHTML = filtered.map(hub => {
+    const col = CAT_COLORS[hub.cat];
+    const title = currentLang === 'kr' ? hub.kr : hub[currentLang];
+    const sub = currentLang === 'kr' ? hub.en : hub.kr;
+    const addrText = getHubAddr(hub, currentLang);
+    const cntText = getHubCnt(hub, currentLang);
+    return `
+      <div class="hub-item ${hub.id === selectedId ? 'selected' : ''}" onclick="selectHub(${hub.id}, true)">
+        <div class="num-circle" style="background:${col}">${hub.id}</div>
+        <div class="hub-info">
+          <div class="hub-name">${title}</div>
+          <div class="hub-trans">${sub}</div>
+          <div class="hub-addr">📍 ${addrText}</div>
+          <span class="hub-tag">⚡ AED ${cntText}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderAllList() {
+  const t = UI_TEXT[currentLang];
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  const filtered = ALL_FACILITIES.filter(f => {
+    const matchDong = currentDong === 'ALL' || f.dong === currentDong;
+    const matchQ = !q ||
+      f.name.toLowerCase().includes(q) ||
+      f.addr_kr.toLowerCase().includes(q) ||
+      f.addr_en.toLowerCase().includes(q) ||
+      f.addr_vi.toLowerCase().includes(q) ||
+      f.addr_uz.toLowerCase().includes(q) ||
+      f.cat_raw.toLowerCase().includes(q);
+    return matchDong && matchQ;
+  });
+
+  document.getElementById('all-count').textContent = t.resultCount(filtered.length);
+  document.getElementById('all-list').innerHTML = filtered.map(f => {
+    const addrText = getFacAddr(f, currentLang);
+    const cntText = getFacCnt(f, currentLang);
+    const dongText = getFacDong(f, currentLang);
+    const query = encodeURIComponent(f.addr_kr + ' ' + f.name);
+    const naverUrl = `https://map.naver.com/v5/search/${query}`;
+    const googleUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+    return `
+      <div class="hub-item" style="cursor:default;">
+        <div class="num-circle" style="background:#334155; font-size:11px;">AED</div>
+        <div class="hub-info">
+          <div class="hub-name">${f.name}</div>
+          <div class="hub-addr">📍 ${addrText}</div>
+          <div style="margin-top:5px; display:flex; flex-wrap:wrap; gap:5px; align-items:center;">
+            <span class="hub-tag">${dongText} · ${cntText}</span>
+            <a href="${naverUrl}" target="_blank" rel="noopener" style="font-size:11px; font-weight:700; color:#03C75A; text-decoration:none; padding:2px 6px; border:1px solid #03C75A; border-radius:5px;">Naver Map</a>
+            <a href="${googleUrl}" target="_blank" rel="noopener" style="font-size:11px; font-weight:700; color:#2563EB; text-decoration:none; padding:2px 6px; border:1px solid #2563EB; border-radius:5px;">Google Maps</a>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+renderDongFilter();
+renderPins();
+renderDetailCard();
+renderCoreList();
+</script>
+</body>
+</html>
